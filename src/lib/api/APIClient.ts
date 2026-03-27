@@ -1,6 +1,7 @@
+import { EventEmitter } from "../util/EventEmitter";
 import { SocketClient } from "./SocketClient";
 
-export class APIClient {
+export class APIClient extends EventEmitter {
   token?: string;
   tokenId?: string;
 
@@ -12,7 +13,7 @@ export class APIClient {
 
   userId?: string;
   constructor() {
-
+    super();
   }
 
   async connect(apiToken: string, tokenId: string) {
@@ -28,6 +29,8 @@ export class APIClient {
     if (!res.user) return false;
     this.authenticated = true;
     this.userId = res.user;
+    // express-session should have authenticated this session by now, sending the headers each time shouldn't be necessary
+    this.emit("authenticated");
     return true;
   }
 
