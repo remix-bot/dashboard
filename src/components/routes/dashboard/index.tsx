@@ -5,7 +5,9 @@ const Dashboard: Component = () => {
   const { user } = ensureAuth();
   console.log(user);
   console.log("rendering")
-  return <></>
+  return <>
+    <h1>Dashboard</h1>
+  </>
 }
 
 export default Dashboard;
