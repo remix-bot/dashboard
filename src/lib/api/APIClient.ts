@@ -1,5 +1,7 @@
+import { AuthResponse } from "../types/APITypes";
 import { EventEmitter } from "../util/EventEmitter";
 import { SocketClient } from "./SocketClient";
+import { User } from "./User";
 
 export class APIClient extends EventEmitter {
   token?: string;
@@ -12,6 +14,7 @@ export class APIClient extends EventEmitter {
   authenticated = false;
 
   userId?: string;
+  user?: User;
   constructor() {
     super();
   }
@@ -25,17 +28,18 @@ export class APIClient extends EventEmitter {
     this.token = apiToken;
     this.tokenId = tokenId;
 
-    const res = await this.get("/info", this.createHeaders());
+    const res = await this.get("/info", this.createHeaders()) as AuthResponse;
     if (!res.user) return false;
+
     this.authenticated = true;
-    this.userId = res.user;
+    this.userId = res.user.id;
+    this.user = new User(res.user);
     // express-session should have authenticated this session by now, sending the headers each time shouldn't be necessary
     this.emit("authenticated");
     return true;
   }
 
   createHeaders() {
-    if (!this.authenticated) return undefined;
     return {
       token: this.token,
       tokenId: this.tokenId
