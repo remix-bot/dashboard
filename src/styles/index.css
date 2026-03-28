@@ -1,0 +1,26 @@
+* {
+  scroll-behavior: smooth;
+}
+.floating {
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+@keyframes floating {
+  0% { transform: translate(0,  0px); }
+  50%  { transform: translate(0, 15px); }
+  100%   { transform: translate(0, -0px); }
+}
+@media screen and (max-width: 740px) {
+  #teamContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.padding {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
