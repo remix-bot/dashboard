@@ -7,7 +7,10 @@ import { redirect, useLocation, useNavigate } from "@solidjs/router";
 
 type AuthContextType = {
   api: APIClient;
-  user: Accessor<User | undefined>
+  user: Accessor<User | undefined>;
+  authState: Accessor<AuthState>;
+  createCode: (user: string) => Promise<string>;
+  verifyLogin: () => Promise<boolean>;
 }
 
 export const AuthContext = createContext<AuthContextType>();
@@ -17,26 +20,79 @@ export const useAuth = () => {
   if (!context) throw new Error("useAuth: cannot find an AuthContext");
   return context;
 }
+
 export const ensureAuth = () => {
   const context = useAuth();
-  if (!context.api.authenticated) {
+  if (context.authState() === AuthState.UNAUTHORISED) {
     const location = useLocation();
     useNavigate()("/login?r=" + location.pathname);
   }
   return context;
 }
 
+export enum AuthState {
+  UNAUTHORISED = "anon",
+  CONNECTING = "connect",
+  AUTHENTICATED = "auth"
+}
+
 const AuthProvider: ParentComponent = (props) => {
   const client = new APIClient();
   const [user, setUser] = createSignal<User | undefined>(undefined);
-  client.connect("499d07b8bee68980f9ce25f98496ee9e", "MN7Y8VQYH15YHEXSV1I").then((success) => {
+  const [state, setState] = createSignal<AuthState>(AuthState.CONNECTING);
+
+  /*client.connect("499d07b8bee68980f9ce25f98496ee9e", "MN7Y8VQYH15YHEXSV1I").then((success) => {
     console.log(success, client.user);
     setUser(client.user);
   });
+  */
+
+  const connect = async (apiToken: string, tokenId: string) => {
+    setState(AuthState.CONNECTING);
+    const s = await client.connect(apiToken, tokenId);
+    setState(s ? AuthState.AUTHENTICATED : AuthState.UNAUTHORISED);
+    return s;
+  }
+
+  const token = localStorage.getItem("apiToken");
+  const tokenId = localStorage.getItem("apiTokenId");
+  if (token && tokenId) {
+    connect(token, tokenId);
+  } else {
+    setState(AuthState.UNAUTHORISED);
+  }
+
+  client.on("authenticated", () => {
+    console.log("authenticated");
+    setUser(client.user);
+  });
+
+  const createCode = async (user: string) => {
+    const code = await client.getLoginCode(user);
+    return import.meta.env.VITE_COMMAND_PREFIX + "login " + code;
+  }
+  const verifyLogin = async () => {
+    const tokens = await client.verifyCode();
+    if (!tokens) return false;
+    localStorage.setItem("apiToken", tokens.token);
+    localStorage.setItem("apiTokenId", tokens.id);
+
+    const s = await connect(tokens.token, tokens.id);
+    if (s) return true;
+
+    localStorage.removeItem("apiToken");
+    localStorage.removeItem("apiTokenId");
+    // TODO: display error message
+
+    return false;
+  }
 
   return <AuthContext.Provider value={{
     api: client,
-    user
+    authState: state,
+    user,
+    createCode,
+    verifyLogin
   }}>
     {props.children}
   </AuthContext.Provider>

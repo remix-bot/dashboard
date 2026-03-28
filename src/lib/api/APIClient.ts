@@ -38,6 +38,21 @@ export class APIClient extends EventEmitter {
     this.emit("authenticated");
     return true;
   }
+  async getLoginCode(userId: string) {
+    const res = await this.post("/login", {
+      user: userId
+    });
+    if (!res.code) {
+      console.error("invalid response: ", res);
+      return null;
+    }
+    return res.code as string;
+  }
+  async verifyCode() {
+    const res = await this.post("/login/verify");
+    if (!res.verified) return null;
+    return res.token as { token: string, id: string };
+  }
 
   createHeaders() {
     return {
@@ -55,6 +70,13 @@ export class APIClient extends EventEmitter {
     return (await fetch(this.apiUrl + path, {
       method: "GET",
       headers: h
+    })).json();
+  }
+  async post(path: string, body?: Object): Promise<any> {
+    return (await fetch(this.apiUrl + path, {
+      method: "POST",
+      // @ts-ignore
+      body: body
     })).json();
   }
 }
