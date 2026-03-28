@@ -7,7 +7,6 @@ const App: ParentComponent = (props) => {
     <>
       <AuthProvider>
         <Navbar></Navbar>
-        <h1>Provider level</h1>
         {props.children}
       </AuthProvider>
     </>

@@ -3,9 +3,35 @@ body {
   min-height: 100vh;
   position: relative;
   padding-bottom: 4rem;
+  background-color: rgb(17 24 39);
 }
 footer {
   position: absolute;
   bottom: 0px;
   /*max-height:*/
 }
+
+input[type="text"] {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 400px;
+  font-family: 'Open Sans', sans-serif;
+}
+/*
+button {
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-align: center;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+*/

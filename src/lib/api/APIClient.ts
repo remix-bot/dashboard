@@ -75,8 +75,11 @@ export class APIClient extends EventEmitter {
   async post(path: string, body?: Object): Promise<any> {
     return (await fetch(this.apiUrl + path, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       // @ts-ignore
-      body: body
+      body: JSON.stringify(body)
     })).json();
   }
 }
