@@ -28,7 +28,7 @@ const Navbar: Component = () => {
             </a>
           </li>
           <li>
-            <a href="http://rvlt.gg/Remix" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-pink-600 dark:hover:bg-gray-700 dark:hover:text-pink-600 md:dark:hover:bg-transparent">
+            <a href={import.meta.env.VITE_SUPPORT_INVITE} class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-pink-600 dark:hover:bg-gray-700 dark:hover:text-pink-600 md:dark:hover:bg-transparent">
               Support
             </a>
           </li>
