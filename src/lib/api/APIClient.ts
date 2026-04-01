@@ -9,7 +9,7 @@ export class APIClient extends EventEmitter {
 
   socket?: SocketClient;
   websocketUrl = "ws://localhost:3000/stoat";
-  apiUrl = "http://localhost:3000";
+  apiUrl = import.meta.env.VITE_API_ENDPOINT;
 
   authenticated = false;
 
