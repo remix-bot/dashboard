@@ -1,14 +1,17 @@
-import { createSignal, ParentComponent, useContext } from "solid-js";
+import { createEffect, createSignal, ParentComponent, useContext } from "solid-js";
 import { createContext } from "solid-js";
 import { APIClient } from "../../api/APIClient";
 import { User } from "../../api/User";
 import { Accessor } from "solid-js";
 import { redirect, useLocation, useNavigate } from "@solidjs/router";
+import { createStore } from "solid-js/store";
+import { Player, SerialisedChannel } from "../../api/Player";
 
 type AuthContextType = {
   api: APIClient;
   user: Accessor<User | undefined>;
   authState: Accessor<AuthState>;
+  channel: Accessor<SerialisedChannel | null>;
   createCode: (user: string) => Promise<string>;
   verifyLogin: () => Promise<boolean>;
 }
@@ -40,6 +43,7 @@ const AuthProvider: ParentComponent = (props) => {
   const client = new APIClient();
   const [user, setUser] = createSignal<User | undefined>(undefined);
   const [state, setState] = createSignal<AuthState>(AuthState.CONNECTING);
+  const [channel, setChannel] = createSignal<SerialisedChannel | null>(null);
 
   /*client.connect("499d07b8bee68980f9ce25f98496ee9e", "MN7Y8VQYH15YHEXSV1I").then((success) => {
     console.log(success, client.user);
@@ -67,6 +71,14 @@ const AuthProvider: ParentComponent = (props) => {
     setUser(client.user);
   });
 
+  createEffect(() => {
+    const u = user();
+    if (!u) return;
+    u.on("join", (player: Player) => {
+      setChannel(player.channel);
+    });
+  });
+
   const createCode = async (user: string) => {
     const code = await client.getLoginCode(user);
     return import.meta.env.VITE_COMMAND_PREFIX + "login " + code;
@@ -91,6 +103,7 @@ const AuthProvider: ParentComponent = (props) => {
     api: client,
     authState: state,
     user,
+    channel,
     createCode,
     verifyLogin
   }}>

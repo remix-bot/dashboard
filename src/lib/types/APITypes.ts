@@ -1,3 +1,5 @@
+import { OP } from "../api/SocketClient"
+
 export type APIUser = {
   id: string,
   discriminator: string,
@@ -10,4 +12,12 @@ export type APIUser = {
 
 export type AuthResponse = {
   user?: APIUser
+}
+
+export type SocketMessage = {
+  op: OP,
+  data: {
+    type: string,
+    data: any
+  }
 }

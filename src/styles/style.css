@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap');
 @import "tailwindcss";
+
+* {
+  font-family: 'Cairo', sans-serif;
+}
+
 body {
   min-height: 100vh;
   position: relative;

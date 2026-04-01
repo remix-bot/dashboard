@@ -1,3 +1,5 @@
+import { SocketMessage } from "../types/APITypes";
+import { EventEmitter } from "../util/EventEmitter";
 import { APIClient } from "./APIClient";
 
 export enum OP {
@@ -6,11 +8,12 @@ export enum OP {
   PING = "PING",
 }
 
-export class SocketClient {
+export class SocketClient extends EventEmitter {
   socket: WebSocket;
   tokenData: { token: string, id: string };
   ping?: number;
   constructor(auth: { token: string, tokenId: string }, config: { url: string }) {
+    super();
     this.socket = new WebSocket(config.url);
 
     this.socket.addEventListener("message", (e) => {
@@ -27,7 +30,15 @@ export class SocketClient {
     this.send(OP.AUTH, this.tokenData);
   }
   onMessage(message: string) {
-    console.log(message);
+    const data = JSON.parse(message) as SocketMessage;
+    console.log(data);
+    if (data.op !== OP.MSG) {
+      console.warn("Unknown OP code: ", data);
+      return;
+    }
+    const payload = data.data.data;
+    const type = data.data.type;
+    this.emit(type, payload);
   }
 
   resetPing() {
