@@ -21,7 +21,7 @@ const Login: Component = () => {
       <div class="form-container">
         <h1>Login</h1>
         <Show when={!code()}>
-            <input type="text" placeholder="Username#XXXX or Revolt user ID"></input>
+            <input type="text" placeholder="Username#XXXX or Stoat user ID"></input>
             <p style="color: red" id="error">
 
             </p>

@@ -8,7 +8,7 @@ const Main: Component = () => {
         <img src="/src/assets/icon.png" style="margin-left: auto; margin-right: auto; border-radius: 100%; height: 11rem" alt="Remix Logo" />
         <h1 style="font-weight: 800; color: white; font-size: 3.75rem; letter-spacing: -0.025em;">Remix</h1>
         <p style="color: rgb(156 163 175); font-size: 1.25rem; line-height: 1.75rem; margin-bottom: 2rem">
-          Revolt's first music bot
+          Stoats's first music bot
         </p>
         <div style="font-weight: 500; display: flex; flex-direction: row; justify-content: center; gap: 0.75rem; margin-bottom: 4rem">
           <a style="padding: 0.75rem 1.25rem 0.75rem 1.25rem; border-radius: 0.5rem; color: white; background-color: rgb(219 39 119)" href={import.meta.env.VITE_BOT_INVITE}>Invite Remix</a>
