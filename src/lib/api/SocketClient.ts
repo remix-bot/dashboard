@@ -1,4 +1,4 @@
-import { SocketMessage } from "../types/APITypes";
+import { APIUser, SocketMessage } from "../types/APITypes";
 import { EventEmitter } from "../util/EventEmitter";
 import { APIClient } from "./APIClient";
 
@@ -29,9 +29,16 @@ export class SocketClient extends EventEmitter {
     console.log("auth");
     this.send(OP.AUTH, this.tokenData);
   }
+  onAuth(user: APIUser) {
+    this.emit("auth", user);
+  }
   onMessage(message: string) {
     const data = JSON.parse(message) as SocketMessage;
     console.log(data);
+    if (data.op === OP.AUTH) {
+      this.onAuth(data.data.data as APIUser);
+      return;
+    }
     if (data.op !== OP.MSG) {
       console.warn("Unknown OP code: ", data);
       return;

@@ -7,7 +7,8 @@ export type APIUser = {
   displayName: string,
   avatar: {
     url: string
-  }
+  },
+  connectedTo: string[]
 }
 
 export type AuthResponse = {
@@ -18,6 +19,6 @@ export type SocketMessage = {
   op: OP,
   data: {
     type: string,
-    data: any
+    data: APIUser | any
   }
 }

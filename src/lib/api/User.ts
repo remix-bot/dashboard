@@ -11,6 +11,7 @@ export class User extends EventEmitter {
   avatar: {
     url: string
   };
+  connectedTo: string[]
   client: APIClient;
   player?: Player;
   constructor(user: APIUser, client: APIClient) {
@@ -21,15 +22,20 @@ export class User extends EventEmitter {
     this.username = user.username;
     this.displayName = user.displayName;
     this.avatar = user.avatar;
+    this.connectedTo = user.connectedTo;
 
     this.client = client;
     this.setupEvents();
   }
 
   setupEvents() {
-    const close = this.client.socket?.on("join", (data: SerialisedPlayer) => {
+    const closeJoin = this.client.socket?.on("join", (data: SerialisedPlayer) => {
       this.player = new Player(data);
       this.emit("join", this.player);
+    });
+    const closeAuth = this.client.socket?.on("auth", (user: APIUser) => {
+      // TODO: check for changes in connectedChannel
+      console.log("auth", user);
     });
   }
 }
