@@ -13,6 +13,7 @@ type AuthContextType = {
   authState: Accessor<AuthState>;
   channel: Accessor<SerialisedChannel | null>;
   createCode: (user: string) => Promise<string>;
+  getExistingCode: () => Promise<string | null>;
   verifyLogin: () => Promise<boolean>;
   logout: () => void;
 }
@@ -87,6 +88,11 @@ const AuthProvider: ParentComponent = (props) => {
     const code = await client.getLoginCode(user);
     return import.meta.env.VITE_COMMAND_PREFIX + "login " + code;
   }
+  const getExistingCode = async () => {
+    const res = await client.get("/login/code");
+    if (!res.code) return null;
+    return import.meta.env.VITE_COMMAND_PREFIX + "login " + res.code as string;
+  }
   const verifyLogin = async () => {
     const tokens = await client.verifyCode();
     if (!tokens) return false;
@@ -115,6 +121,7 @@ const AuthProvider: ParentComponent = (props) => {
     user,
     channel,
     createCode,
+    getExistingCode,
     verifyLogin,
     logout
   }}>

@@ -3,7 +3,7 @@ import { AuthState, useAuth } from "../../lib/providers/auth/AuthProvider";
 import { useLocation, useNavigate } from "@solidjs/router";
 
 const Login: Component = () => {
-  const { authState, createCode, verifyLogin } = useAuth();
+  const { authState, createCode, verifyLogin, getExistingCode } = useAuth();
 
   // redirect on successfull auth
   const redirect = useNavigate();
@@ -14,6 +14,15 @@ const Login: Component = () => {
   });
 
   const [code, setCode] = createSignal<string | null>(null);
+
+  getExistingCode().then(code => {
+    if (!code) {
+      localStorage.removeItem("loginStarted");
+      return;
+    }
+    setCode(code);
+    localStorage.setItem("loginStarted", "true");
+  });
 
   return <>
     <link rel="stylesheet" href="/src/styles/login.css"></link>
@@ -31,6 +40,7 @@ const Login: Component = () => {
               const value = e.target.parentElement?.querySelector("input")?.value;
               if (!value) return;
               const token = await createCode(value);
+              localStorage.setItem("loginStarted", "true");
               setCode(token);
             }} type="button" style="width: 85%; background-color: rgb(219 39 119)" class="text-white bg-pink-700 hover:bg-pink-800 focus:outline-none focus:ring-4 focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
               <i class="fas fa-sign-in-alt mr-2"></i>Submit
@@ -39,9 +49,17 @@ const Login: Component = () => {
         <Show when={!!code()}>
           <p>
             Login process started! In a server that has Remix, run
-            <span class="tooltip-container">
+            <span class="tooltip-container" onMouseLeave={(e) => {
+              (e.currentTarget.children[0] as HTMLSpanElement).innerText = "Click to copy";
+            }}>
               <span class="tooltip">Click to copy</span>
-              <code id="command">{code()}</code>
+              <code id="command" onClick={(e) => {
+                navigator.clipboard.writeText(e.currentTarget.innerText).then(() => {
+                  const tooltip = document.querySelector(".tooltip") as HTMLSpanElement;
+                  if (!tooltip) return;
+                  tooltip.innerText = "Copied!";
+                });
+              }}>{code()}</code>
             </span>! (You may need to edit the prefix depending on the server)
           </p>
           <p>
@@ -52,7 +70,9 @@ const Login: Component = () => {
 
           </p>
           <button onClick={async () => {
-            verifyLogin();
+            const s = await verifyLogin();
+            if (!s) return;
+            localStorage.removeItem("loginStarted");
           }} type="button" class="text-white bg-pink-700 hover:bg-pink-800 focus:outline-none focus:ring-4 focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
             <i class="fas fa-check mr-2"></i>Check for verification
           </button>
