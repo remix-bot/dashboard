@@ -8,6 +8,7 @@ import Main from './components/routes/index';
 import Commands from './components/routes/Commands';
 import Dashboard from './components/routes/dashboard';
 import Login from './components/routes/Login';
+import Logout from './components/routes/Logout';
 
 const root = document.getElementById('root');
 
@@ -21,6 +22,7 @@ render(() =>
   <Router root={App}>
     <Route path={"/"} component={Main}></Route>
     <Route path={"/login"} component={Login}></Route>
+    <Route path={"/logout"} component={Logout}></Route>
     <Route path={"/commands"} component={Commands}></Route>
     <Route path={"/dashboard"} component={Dashboard}></Route>
   </Router>

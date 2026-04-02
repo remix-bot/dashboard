@@ -14,6 +14,7 @@ type AuthContextType = {
   channel: Accessor<SerialisedChannel | null>;
   createCode: (user: string) => Promise<string>;
   verifyLogin: () => Promise<boolean>;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>();
@@ -26,10 +27,13 @@ export const useAuth = () => {
 
 export const ensureAuth = () => {
   const context = useAuth();
-  if (context.authState() === AuthState.UNAUTHORISED) {
-    const location = useLocation();
-    useNavigate()("/login?r=" + location.pathname);
-  }
+  const navigate = useNavigate();
+  createEffect(() => {
+    if (context.authState() === AuthState.UNAUTHORISED) {
+      const location = useLocation();
+      navigate((location.pathname !== "/logout") ? "/login?r=" + location.pathname : "/");
+    }
+  });
   return context;
 }
 
@@ -98,6 +102,12 @@ const AuthProvider: ParentComponent = (props) => {
 
     return false;
   }
+  const logout = () => {
+    localStorage.removeItem("apiToken");
+    localStorage.removeItem("apiTokenId");
+    setUser(undefined);
+    setState(AuthState.UNAUTHORISED);
+  }
 
   return <AuthContext.Provider value={{
     api: client,
@@ -105,7 +115,8 @@ const AuthProvider: ParentComponent = (props) => {
     user,
     channel,
     createCode,
-    verifyLogin
+    verifyLogin,
+    logout
   }}>
     {props.children}
   </AuthContext.Provider>
