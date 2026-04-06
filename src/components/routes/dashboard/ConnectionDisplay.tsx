@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
-import { useAuth } from "../../../lib/providers/auth/AuthProvider";
+import { useVoice } from "../../../lib/providers/auth/VoiceProvider";
 
 const ConnectionDisplay: Component = () => {
-  const { channel } = useAuth();
+  const { channel } = useVoice();
   return <>
     {/* TODO: onclick closecalls */}
     <a style="cursor: initial; opacity: 0.5; text-decoration: none; color: white; float: right;" id="closecall" href="javascript:void(0);"><i class="fa-solid fa-phone-slash"></i></a>

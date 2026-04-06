@@ -11,7 +11,6 @@ type AuthContextType = {
   api: APIClient;
   user: Accessor<User | undefined>;
   authState: Accessor<AuthState>;
-  channel: Accessor<SerialisedChannel | null>;
   createCode: (user: string) => Promise<string>;
   getExistingCode: () => Promise<string | null>;
   verifyLogin: () => Promise<boolean>;
@@ -48,7 +47,6 @@ const AuthProvider: ParentComponent = (props) => {
   const client = new APIClient();
   const [user, setUser] = createSignal<User | undefined>(undefined);
   const [state, setState] = createSignal<AuthState>(AuthState.CONNECTING);
-  const [channel, setChannel] = createSignal<SerialisedChannel | null>(null);
 
   /*client.connect("499d07b8bee68980f9ce25f98496ee9e", "MN7Y8VQYH15YHEXSV1I").then((success) => {
     console.log(success, client.user);
@@ -74,17 +72,6 @@ const AuthProvider: ParentComponent = (props) => {
   client.on("authenticated", () => {
     console.log("authenticated");
     setUser(client.user);
-  });
-
-  createEffect(() => {
-    const u = user();
-    if (!u) return;
-    u.on("join", (player: Player) => {
-      setChannel(player.channel);
-    });
-    u.on("leave", (channel: string) => {
-      setChannel(null);
-    });
   });
 
   const createCode = async (user: string) => {
@@ -122,7 +109,6 @@ const AuthProvider: ParentComponent = (props) => {
     api: client,
     authState: state,
     user,
-    channel,
     createCode,
     getExistingCode,
     verifyLogin,
