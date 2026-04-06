@@ -5,7 +5,7 @@ import ChannelList from "./ChannelList";
 import ConnectionDisplay from "./ConnectionDisplay";
 
 const Dashboard: Component = () => {
-  const { user } = ensureAuth();
+  const { user } = ensureAuth(); // forces authentication on the /dashboard route
   console.log(user);
   console.log("rendering")
   return <>

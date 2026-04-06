@@ -1,5 +1,5 @@
 import { createContext, useContext, ParentComponent, createEffect, Accessor, createSignal } from "solid-js";
-import { ensureAuth } from "./AuthProvider";
+import { useAuth } from "./AuthProvider";
 import { Player, SerialisedChannel } from "../../api/Player";
 
 export type VoiceContextType = {
@@ -15,7 +15,7 @@ export const useVoice = () => {
 }
 
 const VoiceProvider: ParentComponent = (props) => {
-  const { user } = ensureAuth();
+  const { user } = useAuth();
 
   const [channel, setChannel] = createSignal<SerialisedChannel | null>(null);
 

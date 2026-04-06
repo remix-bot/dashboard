@@ -1,3 +1,4 @@
+import { SerialisedChannel } from "../api/Player"
 import { OP } from "../api/SocketClient"
 
 export type APIUser = {
@@ -9,6 +10,13 @@ export type APIUser = {
     url: string
   },
   connectedTo: string[]
+}
+
+export type APIServer = {
+  name: string,
+  id: string,
+  icon?: string, // url
+  voiceChannels: SerialisedChannel[]
 }
 
 export type AuthResponse = {

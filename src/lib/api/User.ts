@@ -1,4 +1,4 @@
-import { APIUser } from "../types/APITypes";
+import { APIServer, APIUser } from "../types/APITypes";
 import { EventEmitter } from "../util/EventEmitter";
 import { APIClient } from "./APIClient";
 import { Player, SerialisedPlayer } from "./Player";
@@ -54,5 +54,9 @@ export class User extends EventEmitter {
       // TODO: check for changes in connectedChannel
       console.log("auth", user);
     });
+  }
+
+  async getMutualServers() {
+    return (await this.client.authorisedGet("/servers")) as APIServer[];
   }
 }

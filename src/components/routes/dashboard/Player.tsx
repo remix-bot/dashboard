@@ -58,7 +58,8 @@ const Player: Component = () => {
             max-width: 400px;
             background-color: rgb(19, 25, 39);
             border-color: #bbb;
-            transition: all 0.2s ease-in-out;" />
+            transition: all 0.2s ease-in-out;"
+          disabled/>
         <div style="position: relative; align-self: center; width: 100%">
           <ul id="completions" style="
             background-color: rgb(19, 25, 39);

@@ -36,6 +36,7 @@ export class APIClient extends EventEmitter {
 
     this.userId = res.user.id;
     // express-session should have authenticated this session by now, sending the headers each time shouldn't be necessary
+
     this.emit("authenticated");
     return true;
   }
