@@ -1,3 +1,5 @@
+import "../../../styles/modal.css";
+
 import { createContext, createSignal, JSX, ParentComponent, useContext } from "solid-js";
 
 export type ModalContextType = {
@@ -31,7 +33,6 @@ const ModalProvider: ParentComponent = (props) => {
     close,
     open
   }}>
-    <link rel="stylesheet" href="/src/styles/modal.css"></link>
     <div class="modalContainer" style={{
       display: (!!content()) ? "flex" : "none"
     }} onClick={(e) => {
