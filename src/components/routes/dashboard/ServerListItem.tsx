@@ -10,10 +10,6 @@ export type ChannelItemProps = {
 const ServerListItem: Component<ChannelItemProps> = (props) => {
   const [showChannels, setShowChannels] = createSignal(false);
 
-  createEffect(() => {
-    console.log("ssc", showChannels());
-  });
-
   if (props.server.icon) {
     const css = document.getElementById("channelListStyle") as HTMLStyleElement;
     if (!css) throw "unable to find style element";
@@ -24,7 +20,6 @@ const ServerListItem: Component<ChannelItemProps> = (props) => {
   }}>
     <Show when={props.server.voiceChannels.length > 0}>
       <span class="caret" onClick={(e) => {
-        console.log(props.server, props.server.voiceChannels.length);
         if (props.server.voiceChannels.length <= 0) return;
         setShowChannels(!showChannels());
         e.currentTarget.classList.toggle("caret-down");

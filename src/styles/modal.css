@@ -1,0 +1,28 @@
+.modalContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 100;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 1.5rem;
+  background-color: rgb(31, 41, 55);
+  border-radius: 5px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+  color: white;
+
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+}

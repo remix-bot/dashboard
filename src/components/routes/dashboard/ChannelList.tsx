@@ -10,7 +10,6 @@ const ChannelList: Component = () => {
   createEffect(async () => {
     setLoading(true);
     const s = await user()?.getMutualServers();
-    console.log(s);
     if (!s) return setLoading(false);
     setLoading(false);
     setServers(s);
