@@ -82,6 +82,9 @@ const AuthProvider: ParentComponent = (props) => {
     u.on("join", (player: Player) => {
       setChannel(player.channel);
     });
+    u.on("leave", (channel: string) => {
+      setChannel(null);
+    });
   });
 
   const createCode = async (user: string) => {

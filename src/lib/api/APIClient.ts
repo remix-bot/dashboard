@@ -20,20 +20,21 @@ export class APIClient extends EventEmitter {
   }
 
   async connect(apiToken: string, tokenId: string) {
+    const res = await this.get("/info", this.createHeaders()) as AuthResponse;
+    if (!res.user) return false;
+    this.authenticated = true;
+
     this.socket = new SocketClient({
       token: apiToken, tokenId
     }, {
       url: this.websocketUrl
     });
+    this.user = new User(res.user, this);
+
     this.token = apiToken;
     this.tokenId = tokenId;
 
-    const res = await this.get("/info", this.createHeaders()) as AuthResponse;
-    if (!res.user) return false;
-
-    this.authenticated = true;
     this.userId = res.user.id;
-    this.user = new User(res.user, this);
     // express-session should have authenticated this session by now, sending the headers each time shouldn't be necessary
     this.emit("authenticated");
     return true;
@@ -59,6 +60,13 @@ export class APIClient extends EventEmitter {
       token: this.token,
       tokenId: this.tokenId
     };
+  }
+  async authorisedGet(path: string, headers?: Object): Promise<any> {
+    if (!this.authenticated) return null;
+    return this.get(path, {
+      ...this.createHeaders(),
+      ...headers
+    } as Object);
   }
 
   async get(path: string, headers?: Object): Promise<any> {
