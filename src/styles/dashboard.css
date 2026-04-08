@@ -68,6 +68,7 @@
   transition: all 0.2s;
   border: 1px solid #088395;
   box-shadow: 0px 2px 4px #088395;
+  padding-left: 0.4rem;
 }
 #channels * {
   padding: 0.1rem;

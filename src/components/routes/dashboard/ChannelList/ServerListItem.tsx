@@ -1,14 +1,21 @@
 import { Component, createEffect, createSignal, For, Show } from "solid-js";
-import { SerialisedChannel } from "../../../lib/api/Player";
-import { APIServer } from "../../../lib/types/APITypes";
+import { SerialisedChannel } from "../../../../lib/api/Player";
+import { APIServer } from "../../../../lib/types/APITypes";
 import ChannelListItem from "./ChannelListItem";
+import { useModal } from "../../../../lib/providers/modal/ModalProvider";
+import TextChannelSelector from "./TextChannelSelector";
 
 export type ChannelItemProps = {
-  server: APIServer
+  server: APIServer,
+  onChannelClick: (server: APIServer, channel: SerialisedChannel) => any,
 }
 
 const ServerListItem: Component<ChannelItemProps> = (props) => {
   const [showChannels, setShowChannels] = createSignal(false);
+
+  const initJoin = (channel: SerialisedChannel) => {
+    props.onChannelClick(props.server, channel);
+  }
 
   if (props.server.icon) {
     const css = document.getElementById("channelListStyle") as HTMLStyleElement;
@@ -30,7 +37,7 @@ const ServerListItem: Component<ChannelItemProps> = (props) => {
       <ul class="nested active">
         <For each={props.server.voiceChannels}>
           {(channel) => {
-            return <ChannelListItem channel={channel}></ChannelListItem>
+            return <ChannelListItem channel={channel} onClick={initJoin}></ChannelListItem>
           }}
         </For>
       </ul>

@@ -1,0 +1,14 @@
+.button {
+  border-radius: 5px;
+  background-color: rgb(19, 25, 39);
+  padding: 5px;
+}
+#confirm:not([disabled]) {
+  background-color: #379237;
+  color: black;
+  cursor: pointer;
+}
+
+ul.channels > li {
+  cursor: pointer;
+}

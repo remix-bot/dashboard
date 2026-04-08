@@ -1,13 +1,13 @@
 import "../../../styles/notifications.css";
 
-import { createEffect, createSignal, For, ParentComponent, useContext } from "solid-js";
+import { createSignal, For, ParentComponent, useContext } from "solid-js";
 import { createContext } from "solid-js"
 import NotificationElement from "./NotificationElement";
 import { JSX } from "solid-js";
 
 export type NotificationContextType = {
-  addInfo: (title: string, description: string, time?: 5000) => void;
-  addError: (title: string, description: string, time?: 5000) => void;
+  addInfo: (title: string, description: string, time?: number) => void;
+  addError: (title: string, description: string, time?: number) => void;
 }
 
 export const NotificationContext = createContext<NotificationContextType>();
@@ -57,6 +57,12 @@ const NotificationProvider: ParentComponent = (props) => {
   }
   const addError = (title: string, description: string, time?: number) => {
     addNotification(title, description, time || 5000, NotificationType.ERROR);
+  }
+
+  (window as any).notifications = {
+    addInfo,
+    addError,
+    addNotification
   }
 
   return <NotificationContext.Provider value={{

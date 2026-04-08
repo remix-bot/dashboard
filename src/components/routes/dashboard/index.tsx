@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import { ensureAuth } from "../../../lib/providers/auth/AuthProvider";
 import Player from "./Player";
-import ChannelList from "./ChannelList";
+import ChannelList from "./ChannelList/ChannelList";
 import ConnectionDisplay from "./ConnectionDisplay";
 
 const Dashboard: Component = () => {

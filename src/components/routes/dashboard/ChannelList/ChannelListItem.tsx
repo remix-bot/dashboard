@@ -1,12 +1,14 @@
 import { Component } from "solid-js";
-import { SerialisedChannel } from "../../../lib/api/Player";
+import { SerialisedChannel } from "../../../../lib/api/Player";
+import { useModal } from "../../../../lib/providers/modal/ModalProvider";
 
 export type ChannelListItemProps = {
-  channel: SerialisedChannel
+  channel: SerialisedChannel,
+  onClick: (channel: SerialisedChannel) => any,
+  selected?: boolean
 }
 
 const ChannelListItem: Component<ChannelListItemProps> = (props) => {
-  // TODO: join process initiation
   if (props.channel.icon) {
     const css = document.getElementById("channelListStyle") as HTMLStyleElement;
     if (!css) throw "unable to find style element";
@@ -14,7 +16,9 @@ const ChannelListItem: Component<ChannelListItemProps> = (props) => {
   }
   return <li style={{
     "list-style": "inside"
-  }} itemId={props.channel.id}>
+  }} itemId={props.channel.id} onClick={() => {
+    props.onClick(props.channel);
+  }} class={props.selected ? "selected" : ""}>
     {props.channel.displayName || props.channel.name}
   </li>
 }

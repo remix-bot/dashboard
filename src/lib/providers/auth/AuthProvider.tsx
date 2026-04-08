@@ -105,6 +105,8 @@ const AuthProvider: ParentComponent = (props) => {
     setState(AuthState.UNAUTHORISED);
   }
 
+  (window as any).client = client;
+
   return <AuthContext.Provider value={{
     api: client,
     authState: state,
