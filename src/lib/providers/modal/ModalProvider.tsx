@@ -3,7 +3,7 @@ import "../../../styles/modal.css";
 import { createContext, createSignal, JSX, ParentComponent, useContext } from "solid-js";
 
 export type ModalContextType = {
-  open: (channel: JSX.Element) => void;
+  open: (channel: JSX.Element, onCancelled: () => any) => void;
   close: () => void;
 }
 
@@ -22,11 +22,14 @@ const ModalProvider: ParentComponent = (props) => {
     setContent(<h1>Hi, how are you?</h1>);
     }, 1000);*/
 
+  var onCancel: () => any | undefined;
+
   const close = () => {
     setContent(undefined);
   }
-  const open = (c: JSX.Element) => {
+  const open = (c: JSX.Element, onCancelled: () => any) => {
     setContent(c);
+    onCancel = onCancelled;
   }
 
   return <ModalContext.Provider value={{
@@ -37,6 +40,7 @@ const ModalProvider: ParentComponent = (props) => {
       display: (!!content()) ? "flex" : "none"
     }} onClick={(e) => {
       if (e.target.matches(".modalContainer *")) return;
+      if (onCancel) onCancel();
       close();
     }}>
       <div class="modalContent">

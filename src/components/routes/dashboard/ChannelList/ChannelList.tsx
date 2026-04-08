@@ -29,7 +29,9 @@ const ChannelList: Component = () => {
     channel = c;
     setCurrServer(server);
   }
-  const initJoin = (voice: SerialisedChannel, text: SerialisedChannel) => {
+  const initJoin = async (voice: SerialisedChannel, text: SerialisedChannel) => {
+    const notif = addInfo("Joining", "Attempting to join; View progress in the selected text channel");
+    //const data = await api.post("/voice/" + voice.id + "/join", { text: text.id });
 
   }
 
@@ -38,10 +40,13 @@ const ChannelList: Component = () => {
     if (!server) return;
 
     const selector = <TextChannelSelector server={server} onSelect={(c) => {
-      console.log(c, "voice:", channel);
+      initJoin(channel!, c);
       close();
+      setCurrServer(undefined);
     }}></TextChannelSelector>;
-    open(selector);
+    open(selector, () => {
+      setCurrServer(undefined);
+    });
   });
   return <>
     <style id="channelListStyle"></style>
