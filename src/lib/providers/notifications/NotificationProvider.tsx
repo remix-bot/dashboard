@@ -6,8 +6,20 @@ import NotificationElement, { NotificationElementProps } from "./NotificationEle
 import { JSX } from "solid-js";
 
 export type NotificationContextType = {
-  addInfo: (title: string, description: string, time?: number) => void;
-  addError: (title: string, description: string, time?: number) => void;
+  addInfo: (title: string, description: string, time?: number) => {
+      title: string;
+      description: string;
+      time: number;
+      type: NotificationType;
+      id: string;
+  };
+  addError: (title: string, description: string, time?: number) => {
+      title: string;
+      description: string;
+      time: number;
+      type: NotificationType;
+      id: string;
+  };
 }
 
 export const NotificationContext = createContext<NotificationContextType>();

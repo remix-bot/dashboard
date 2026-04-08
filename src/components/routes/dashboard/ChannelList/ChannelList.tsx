@@ -31,8 +31,12 @@ const ChannelList: Component = () => {
   }
   const initJoin = async (voice: SerialisedChannel, text: SerialisedChannel) => {
     const notif = addInfo("Joining", "Attempting to join; View progress in the selected text channel");
-    //const data = await api.post("/voice/" + voice.id + "/join", { text: text.id });
-
+    const data = await api.post("/voice/" + voice.id + "/join", { text: text.id });
+    if (data.error) {
+      addError("Join Failed", "Reason: " + data.error, 7000);
+      return;
+    }
+    notif.description = "Success; [Message]: " + data.message;
   }
 
   createEffect(() => {
