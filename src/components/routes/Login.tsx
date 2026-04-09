@@ -73,7 +73,7 @@ const Login: Component = () => {
             const s = await verifyLogin();
             if (!s) return;
             localStorage.removeItem("loginStarted");
-          }} type="button" class="text-white bg-pink-700 hover:bg-pink-800 focus:outline-none focus:ring-4 focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
+          }} type="button" class="text-white bg-pink-700 hover:bg-pink-800 focus:outline-none focus:ring-4 focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800" style="background-color: #e9196c">
             <i class="fas fa-check mr-2"></i>Check for verification
           </button>
         </Show>

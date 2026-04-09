@@ -26,7 +26,7 @@ body {
 }
 
 button {
-    background-color: #e9196c;
+  /*background-color: #e9196c;*/
     color: #fff;
     cursor: pointer;
     font-weight: bold;

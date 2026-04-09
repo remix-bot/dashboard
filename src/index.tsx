@@ -9,6 +9,7 @@ import Commands from './components/routes/Commands';
 import Dashboard from './components/routes/dashboard';
 import Login from './components/routes/Login';
 import Logout from './components/routes/Logout';
+import NotFound from './components/routes/NotFound';
 
 const root = document.getElementById('root');
 
@@ -25,5 +26,6 @@ render(() =>
     <Route path={"/logout"} component={Logout}></Route>
     <Route path={"/commands"} component={Commands}></Route>
     <Route path={"/dashboard"} component={Dashboard}></Route>
+    <Route path={"/*"} component={NotFound}></Route>
   </Router>
 , root!);
