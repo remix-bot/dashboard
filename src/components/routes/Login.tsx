@@ -1,6 +1,7 @@
 import { Component, createEffect, createSignal, Show } from "solid-js";
 import { AuthState, useAuth } from "../../lib/providers/auth/AuthProvider";
 import { useLocation, useNavigate } from "@solidjs/router";
+import "../../styles/login.css";
 
 const Login: Component = () => {
   const { authState, createCode, verifyLogin, getExistingCode } = useAuth();
@@ -25,7 +26,6 @@ const Login: Component = () => {
   });
 
   return <>
-    <link rel="stylesheet" href="/src/styles/login.css"></link>
     <section class="content-container">
       <div class="form-container">
         <h1>Login</h1>

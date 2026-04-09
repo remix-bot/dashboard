@@ -1,6 +1,7 @@
 import { Component, createResource, For } from "solid-js";
 import { useAuth } from "../../lib/providers/auth/AuthProvider";
 import Command from "./Command";
+import "../../styles/commands.css";
 
 const Commands: Component = () => {
   const { api } = useAuth();
@@ -25,7 +26,6 @@ const Commands: Component = () => {
     }
   }
   return <>
-    <link rel="stylesheet" href="/src/styles/commands.css"></link>
     <br />
     <h1 style="text-align: center; font-size: 200%">Commands</h1>
     <p style="text-align: center">Note: A better command overview is in the making.</p>

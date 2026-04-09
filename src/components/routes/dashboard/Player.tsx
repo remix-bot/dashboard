@@ -1,5 +1,6 @@
 import { Component } from "solid-js";
 import Queue from "./Queue";
+import icon from "../../../assets/icon.png";
 
 const Player: Component = () => {
   return <>
@@ -20,7 +21,7 @@ const Player: Component = () => {
     font-size: 1rem;" class="remix-player">
 
     <div style="aspect-ratio: 1/1; margin-right: 2rem; grid-row: 1; grid-column: 1;" class="thumbnail">
-      <img id="thumbnail" style="border-radius: 5px; object-fit: cover; height: 100%; width: 100%;" src="src/assets/icon.png" alt="Thumbnail of the current song." />
+      <img id="thumbnail" style="border-radius: 5px; object-fit: cover; height: 100%; width: 100%;" src={icon} alt="Thumbnail of the current song." />
     </div>
 
     <div style="display: flex; justify-content: center; height: 100%; flex-grow: 2; grid-row: 1; grid-column-start: 2; grid-column-end: 4;" class="player-info">

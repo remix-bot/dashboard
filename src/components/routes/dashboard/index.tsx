@@ -3,13 +3,13 @@ import { ensureAuth } from "../../../lib/providers/auth/AuthProvider";
 import Player from "./Player";
 import ChannelList from "./ChannelList/ChannelList";
 import ConnectionDisplay from "./ConnectionDisplay";
+import "../../../styles/dashboard.css";
 
 const Dashboard: Component = () => {
   const { user } = ensureAuth(); // forces authentication on the /dashboard route
   console.log(user);
   console.log("rendering")
   return <>
-    <link rel="stylesheet" href="/src/styles/dashboard.css"></link>
   <section class="main">
     <h1 style="font-size: 200%; color: rgb(219 39 119)" class="self-center text-2xl font-semibold whitespace-nowrap dark:text-pink-600">Remix Dashboard</h1>
     <br />

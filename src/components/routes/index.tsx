@@ -1,11 +1,12 @@
 import { Component } from "solid-js";
+import "../../styles/index.css";
+import icon from "../../assets/icon.png";
 
 const Main: Component = () => {
   return <>
-    <link rel="stylesheet" href="/src/styles/index.css"></link>
     <section style="margin-top: 8rem">
       <div style="padding: 2rem 1rem 2rem 1rem; text-align: center">
-        <img src="/src/assets/icon.png" style="margin-left: auto; margin-right: auto; border-radius: 100%; height: 11rem" alt="Remix Logo" />
+        <img src={icon} style="margin-left: auto; margin-right: auto; border-radius: 100%; height: 11rem" alt="Remix Logo" />
         <h1 style="font-weight: 800; color: white; font-size: 3.75rem; letter-spacing: -0.025em;">Remix</h1>
         <p style="color: rgb(156 163 175); font-size: 1.25rem; line-height: 1.75rem; margin-bottom: 2rem">
           Stoats's first music bot
