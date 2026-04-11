@@ -20,21 +20,34 @@ export type SerialisedPlayer = {
   loop: number,
   paused: boolean,
   queue: Object,
-  volume: number
+  volume: number,
+  started: number, // ISO JS timestamp
+  timeDiff: number, // time elapsed before the last restart (add onto started)
 }
 
 export class Player {
-  loop: number;
-  paused: boolean;
-  volume: number;
-  channel: SerialisedChannel;
+  loop!: number;
+  paused!: boolean;
+  volume!: number;
+  channel!: SerialisedChannel;
+  started!: number;
+  timeDiff!: number;
   constructor(serialisedPlayer: SerialisedPlayer) {
+    this.deserialise(serialisedPlayer);
+  }
+  deserialise(serialisedPlayer: SerialisedPlayer) {
     this.loop = serialisedPlayer.loop;
     this.paused = serialisedPlayer.paused;
     this.volume = serialisedPlayer.volume;
     this.channel = serialisedPlayer.channel;
+    this.started = serialisedPlayer.started;
+    this.timeDiff = serialisedPlayer.timeDiff;
   }
 
+  /** @description in seconds */
+  get elapsedTime() {
+    return ((this.paused) ? this.timeDiff : (Date.now() - this.started) + this.timeDiff) / 1000;
+  }
   get songLoop() {
     return (this.loop & 2) === 2;
   }

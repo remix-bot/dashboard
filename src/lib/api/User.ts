@@ -50,6 +50,9 @@ export class User extends EventEmitter {
       }
       this.emit("leave", channel);
     });
+    const closePlayer = this.client.socket?.on("player", (data: SerialisedPlayer) => {
+      this.player?.deserialise(data);
+    });
     const closeAuth = this.client.socket?.on("auth", (user: APIUser) => {
       // TODO: check for changes in connectedChannel
       console.log("auth", user);
