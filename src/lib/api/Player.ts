@@ -19,19 +19,39 @@ export type SerialisedPlayer = {
   channel: SerialisedChannel,
   loop: number,
   paused: boolean,
-  queue: Object,
+  playing: boolean,
+  queue: SerialisedQueue,
   volume: number,
   started: number, // ISO JS timestamp
   timeDiff: number, // time elapsed before the last restart (add onto started)
+}
+export type SerialisedVideo = {
+  title: string,
+  url: string,
+  videoId: string,
+  type: "radio" | "external" | "video",
+  duration: string,
+  description: string,
+  thumbnail: string,
+  artist: {
+    name: string,
+    url: string,
+  }
+}
+export type SerialisedQueue = {
+  current: SerialisedVideo | undefined,
+  data: SerialisedVideo[]
 }
 
 export class Player {
   loop!: number;
   paused!: boolean;
+  playing!: boolean;
   volume!: number;
   channel!: SerialisedChannel;
   started!: number;
   timeDiff!: number;
+  queue!: SerialisedQueue;
   constructor(serialisedPlayer: SerialisedPlayer) {
     this.deserialise(serialisedPlayer);
   }
@@ -42,6 +62,8 @@ export class Player {
     this.channel = serialisedPlayer.channel;
     this.started = serialisedPlayer.started;
     this.timeDiff = serialisedPlayer.timeDiff;
+    this.playing = serialisedPlayer.playing;
+    this.queue = serialisedPlayer.queue;
   }
 
   /** @description in seconds */
