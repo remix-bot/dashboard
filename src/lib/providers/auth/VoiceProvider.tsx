@@ -56,6 +56,21 @@ const VoiceProvider: ParentComponent = (props) => {
     });
     u.on("leave", (channel: string) => {
       setChannel(null);
+      setPlayer({
+        loop: 0,
+        paused: false,
+        volume: 100,
+        /*queue: {
+          current: null,
+          data: []
+          },*/
+        started: 0,
+        timeDiff: 0,
+        queue: {
+          current: undefined,
+          data: []
+        }
+      });
     });
     u.on("playerUpdate", (p: Player) => {
       setPlayer({

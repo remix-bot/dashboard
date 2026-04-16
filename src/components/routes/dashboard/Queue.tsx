@@ -1,7 +1,9 @@
-import { Component } from "solid-js";
+import { Component, For } from "solid-js";
 import icon from "../../../assets/icon.png";
+import { useVoice } from "../../../lib/providers/auth/VoiceProvider";
 
 const Queue: Component = () => {
+  const { player } = useVoice();
   return <>
     <div style="grid-row: 2; grid-column-start: 1; grid-column-end: 4" class="queue-container">
       <h1 style="font-size: 1.5rem">Queue</h1>
@@ -14,7 +16,22 @@ const Queue: Component = () => {
         </div>
         <p style="align-self: center">3:08</p>
       </div>
-      <div class="queue" style="width: 100%; display: flex; flex-direction: column;"></div> {/* inspired by yt music */}
+      <div class="queue" style="width: 100%; display: flex; flex-direction: column;">
+        <For each={player.queue.data} fallback={""}>
+          {(vid) => {
+            return <>
+              <div style="width: 100%; height: 4rem; padding: 0.3rem; display: flex; flex-direction: row; gap: 0.5rem; align-items: center; border-bottom: 1px solid rgb(19, 25, 39)">
+                <img alt="song cover" src={vid.thumbnail || icon} style="aspect-ratio: 1 / 1; height: 100%; border-radius: 5px; object-fit: cover" />
+                <div style="flex-grow: 3; display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem">
+                  <span style="font-size: 1.1rem">{vid.title}</span>
+                  <span style="font-size: 0.8rem">{vid.artist.name}</span>
+                </div>
+                <p style="align-self: center">{vid.duration}</p>
+              </div>
+            </>
+          }}
+        </For>
+      </div> {/* inspired by yt music */}
     </div>
   </>
 }
