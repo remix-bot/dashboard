@@ -5,10 +5,13 @@ import { useVoice } from "../../../lib/providers/auth/VoiceProvider";
 import { createSignal } from "solid-js";
 import { ensureAuth } from "../../../lib/providers/auth/AuthProvider";
 import { Utils } from "../../../lib/util/Utils";
+import { GenericAPIResponse } from "../../../lib/types/APITypes";
+import { useNotifications } from "../../../lib/providers/notifications/NotificationProvider";
 
 const Player: Component = () => {
   const { user } = ensureAuth();
-  const { player } = useVoice();
+  const { player, skip, pause, resume, setVol } = useVoice();
+  const { addError, addInfo } = useNotifications();
   const [elapsedTime, setElapsedTime] = createSignal<string>("00:00");
   var current = 0;
   var interval: number | undefined;
@@ -36,6 +39,15 @@ const Player: Component = () => {
       updateTimestamp();
     }, 1000);
   });
+
+  const invokeControl = async (func: (() => Promise<GenericAPIResponse>), p?: number) => {
+    // @ts-ignore
+    const res = await func(p);
+    if (res.error) {
+      return addError("Error", res.error, 7000);
+    }
+    return addInfo("Success", res.message!);
+  }
   return <>
   <div style="
     display: grid;
@@ -70,17 +82,27 @@ const Player: Component = () => {
           }</span>
       </span>
       <div style="display: flex; flex-direction: row; justify-content: center; opacity: 0.5">
-          <button class="btn btn-play btn-pbt hidden" style="margin-right: 0.5rem;" disabled>
+        <button class={player.paused ? "btn btn-play btn-pbt" : "btn btn-play btn-pbt hidden"} style="margin-right: 0.5rem;" disabled onClick={() => {
+          invokeControl(resume);
+        }}>
           <i class="fa-solid fa-play" style="color: #e9196c"></i>
         </button>
-        <button class="btn btn-pause btn-pbt" disabled>
+        <button class={!player.paused ? "btn btn-play btn-pbt" : "btn btn-play btn-pbt hidden"} onClick={() => {
+          invokeControl(pause);
+        }}>
           <i class="fa-solid fa-pause" style="color: #e9196c; margin-right: 0.5rem;"></i>
         </button>
-        <button class="btn btn-skip btn-pbt" disabled>
+        <button class="btn btn-skip btn-pbt" disabled onClick={() => {
+          invokeControl(skip);
+        }}>
           <i class="fa-solid fa-forward" style="color: #e9196c"></i>
         </button>
         <div class="slidecontainer" style="margin-left: 0.5rem; display: flex; flex-direction: row; align-items: center; gap: 0.2rem" title="100%">
-          <input type="range" style="accent-color: #e9196c; background: #e9196c" class="slider" value={player.volume * 100} min="0" max="100" id="volumeSlider" />
+          <input type="range" style="accent-color: #e9196c; background: #e9196c" class="slider" value={player.volume * 100} min="0" max="100" id="volumeSlider" onChange={(e) => {
+              const val = e.currentTarget.value;
+              // @ts-ignore
+              invokeControl(setVol, val / 100);
+          }}/>
           <i class="fa-solid fa-volume-high" style="float:left;color: #e9196c" id="volumeIcon"></i>
         </div>
       </div>

@@ -40,6 +40,7 @@ export class User extends EventEmitter {
   setupEvents() {
     const closeJoin = this.client.socket?.on("join", (data: SerialisedPlayer) => {
       this.player = new Player(data);
+      this.emit("playerUpdate", this.player);
       this.emit("join", this.player);
     });
     const closeLeave = this.client.socket?.on("leave", (channel: string) => {

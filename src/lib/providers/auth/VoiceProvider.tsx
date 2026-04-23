@@ -3,6 +3,7 @@ import { useAuth } from "./AuthProvider";
 import { Player, SerialisedChannel, SerialisedQueue } from "../../api/Player";
 import { createStore } from "solid-js/store";
 import { User } from "../../api/User";
+import { GenericAPIResponse } from "../../types/APITypes";
 
 export type PlayerStore = {
   loop: number;
@@ -20,6 +21,11 @@ export type PlayerStore = {
 export type VoiceContextType = {
   channel: Accessor<SerialisedChannel | null>;
   player: PlayerStore;
+
+  setVol: (v: number) => Promise<GenericAPIResponse>;
+  pause: () => Promise<GenericAPIResponse>;
+  resume: () => Promise<GenericAPIResponse>;
+  skip: () => Promise<GenericAPIResponse>;
 }
 
 export const VoiceContext = createContext<VoiceContextType>();
@@ -31,7 +37,7 @@ export const useVoice = () => {
 }
 
 const VoiceProvider: ParentComponent = (props) => {
-  const { user } = useAuth();
+  const { user, api } = useAuth();
 
   const [channel, setChannel] = createSignal<SerialisedChannel | null>(null);
   const [player, setPlayer] = createStore<PlayerStore>({
@@ -47,8 +53,34 @@ const VoiceProvider: ParentComponent = (props) => {
     queue: {
       current: undefined,
       data: []
-    }
+    },
   });
+
+  const setVol = async (v: number) => {
+    if ((user()?.connectedTo.length || 0) === 0) return { error: "Not connected to a voice channel" };
+    return await api.post("/dashboard/control", {
+      action: "volume",
+      volume: v
+    });
+  }
+  const pause = async () => {
+    if ((user()?.connectedTo.length || 0) === 0) return { error: "Not connected to a voice channel" };
+    return await api.post("/dashboard/control", {
+      action: "pausePlayback"
+    });
+  }
+  const resume = async () => {
+    if ((user()?.connectedTo.length || 0) === 0) return { error: "Not connected to a voice channel" };
+    return await api.post("/dashboard/control", {
+      action: "resumePlayback"
+    });
+  }
+  const skip = async () => {
+    if ((user()?.connectedTo.length || 0) === 0) return { error: "Not connected to a voice channel" };
+    return await api.post("/dashboard/control", {
+      action: "skip"
+    });
+  }
 
   const init = (u: User) => {
     u.on("join", (player: Player) => {
@@ -73,14 +105,21 @@ const VoiceProvider: ParentComponent = (props) => {
       });
     });
     u.on("playerUpdate", (p: Player) => {
-      setPlayer({
+      console.log("player", p);
+      setPlayer("loop", p.loop);
+      setPlayer("paused", p.paused);
+      setPlayer("volume", p.volume);
+      setPlayer("started", p.started);
+      setPlayer("timeDiff", p.timeDiff);
+      setPlayer("queue", p.queue);
+      /*setPlayer({
         loop: p.loop,
         paused: p.paused,
         volume: p.volume,
         started: p.started,
         timeDiff: p.timeDiff,
         queue: p.queue
-      });
+        });*/
     });
   }
 
@@ -92,7 +131,11 @@ const VoiceProvider: ParentComponent = (props) => {
 
   return <VoiceContext.Provider value={{
     channel,
-    player
+    player,
+    setVol,
+    pause,
+    skip,
+    resume
   }}>
     {props.children}
   </VoiceContext.Provider>

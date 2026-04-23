@@ -22,6 +22,10 @@ export type APIServer = {
 export type AuthResponse = {
   user?: APIUser
 }
+export type GenericAPIResponse = {
+  error?: string,
+  message?: string,
+}
 
 export type SocketMessage = {
   op: OP,
