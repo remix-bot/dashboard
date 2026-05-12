@@ -112,4 +112,20 @@ export class Utils {
   static uid() {
     return (new Date().valueOf().toString(36) + Math.random().toString(36).substr(2)).toUpperCase();
   }
+
+  static sanitiseUrlString(param: string) {
+    param = decodeURIComponent(param);
+
+    const el = document.createElement("span");
+    el.textContent = param;
+    param = el.textContent || "";
+    el.remove();
+
+    param = param.replace(/<[^>]*>/g, "");
+    const MAX_LEN = 256;
+    if (param.length > MAX_LEN) {
+      param = param.slice(0, MAX_LEN) + "\u2026";
+    }
+    return param;
+  }
 }

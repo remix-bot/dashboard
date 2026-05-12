@@ -2,13 +2,21 @@ import { Component, createEffect, createSignal, Show } from "solid-js";
 import { AuthState, useAuth } from "../../lib/providers/auth/AuthProvider";
 import { useLocation, useNavigate } from "@solidjs/router";
 import "../../styles/login.css";
+import { useNotifications } from "../../lib/providers/notifications/NotificationProvider";
+
+export enum loginAction {
+  DEFAULT = "default",
+  COMPLETE_FLUXER = "complete_fluxer",
+}
 
 const Login: Component = () => {
   const { authState, createCode, verifyLogin, getExistingCode } = useAuth();
+  const { addError } = useNotifications();
 
   // redirect on successfull auth
   const redirect = useNavigate();
   const location = useLocation();
+  const action = (location.query.a) ? location.query.a as string : loginAction.DEFAULT;
   const path = (location.query.r) ? location.query.r as string : "/";
   createEffect(() => {
     if (authState() === AuthState.AUTHENTICATED) redirect(path);
@@ -16,14 +24,21 @@ const Login: Component = () => {
 
   const [code, setCode] = createSignal<string | null>(null);
 
-  getExistingCode().then(code => {
-    if (!code) {
-      localStorage.removeItem("loginStarted");
-      return;
-    }
-    setCode(code);
-    localStorage.setItem("loginStarted", "true");
-  });
+  if (action === loginAction.COMPLETE_FLUXER) {
+    verifyLogin().then(s => {
+      if (!!s) return;
+      addError("Fluxer Auth Error", "An error occured.");
+    });
+  } else {
+    getExistingCode().then(code => {
+      if (!code) {
+        localStorage.removeItem("loginStarted");
+        return;
+      }
+      setCode(code);
+      localStorage.setItem("loginStarted", "true");
+    });
+  }
 
   return <>
     <section class="content-container">
