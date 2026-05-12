@@ -8,7 +8,7 @@ export class APIClient extends EventEmitter {
   tokenId?: string;
 
   socket?: SocketClient;
-  websocketUrl = import.meta.env.VITE_WS_ENDPOINT + "/stoat";
+  websocketUrl = import.meta.env.VITE_WS_ENDPOINT;
   apiUrl = import.meta.env.VITE_API_ENDPOINT;
 
   authenticated = false;
@@ -33,7 +33,7 @@ export class APIClient extends EventEmitter {
     this.socket = new SocketClient({
       token: apiToken, tokenId
     }, {
-      url: this.websocketUrl
+      url: this.websocketUrl + "/" + res.accountType
     });
     this.user = new User(res.user, this);
 

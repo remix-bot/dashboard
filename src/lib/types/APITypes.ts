@@ -20,7 +20,8 @@ export type APIServer = {
 }
 
 export type AuthResponse = {
-  user?: APIUser
+  user?: APIUser,
+  accountType: "stoat" | "fluxer"
 }
 export type GenericAPIResponse = {
   error?: string,
