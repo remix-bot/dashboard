@@ -10,6 +10,7 @@ import Dashboard from './components/routes/dashboard';
 import Login from './components/routes/Login';
 import Logout from './components/routes/Logout';
 import NotFound from './components/routes/NotFound';
+import ErrorPage from './components/routes/Error';
 
 const root = document.getElementById('root');
 
@@ -26,6 +27,7 @@ render(() =>
     <Route path={"/logout"} component={Logout}></Route>
     <Route path={"/commands"} component={Commands}></Route>
     <Route path={"/dashboard"} component={Dashboard}></Route>
+    <Route path={"/error"} component={ErrorPage}></Route>
     <Route path={"/*"} component={NotFound}></Route>
   </Router>
 , root!);
