@@ -1,4 +1,4 @@
-import { AuthResponse } from "../types/APITypes";
+import { AccountType, AuthResponse } from "../types/APITypes";
 import { EventEmitter } from "../util/EventEmitter";
 import { SocketClient } from "./SocketClient";
 import { User } from "./User";
@@ -12,6 +12,7 @@ export class APIClient extends EventEmitter {
   apiUrl = import.meta.env.VITE_API_ENDPOINT;
 
   authenticated = false;
+  type: AccountType = AccountType.STOAT;
 
   userId?: string;
   user?: User;
@@ -29,6 +30,7 @@ export class APIClient extends EventEmitter {
       return false
     };
     this.authenticated = true;
+    this.type = res.accountType;
 
     this.socket = new SocketClient({
       token: apiToken, tokenId

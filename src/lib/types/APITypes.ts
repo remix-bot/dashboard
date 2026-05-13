@@ -19,9 +19,13 @@ export type APIServer = {
   voiceChannels: SerialisedChannel[]
 }
 
+export enum AccountType {
+  STOAT = "stoat",
+  FLUXER = "Fluxer"
+}
 export type AuthResponse = {
   user?: APIUser,
-  accountType: "stoat" | "fluxer"
+  accountType: AccountType
 }
 export type GenericAPIResponse = {
   error?: string,

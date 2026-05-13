@@ -98,7 +98,8 @@ const AuthProvider: ParentComponent = (props) => {
 
     return false;
   }
-  const logout = () => {
+  const logout = async () => {
+    console.log(await client.post("/logout"));
     localStorage.removeItem("apiToken");
     localStorage.removeItem("apiTokenId");
     setUser(undefined);
