@@ -14,7 +14,7 @@ html, body {
 body {
   min-height: 100vh;
   position: relative;
-  background-color: rgb(17 24 39);
+  background-color: #172333; /*rgb(17 24 39);*/
   color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -1,7 +1,7 @@
 import icon from "../assets/icon.png";
 
 import { Component } from "solid-js";
-import LoginWidget from "../LoginWidget";
+import LoginWidget from "./LoginWidget";
 
 const Navbar: Component = () => {
   return <>
