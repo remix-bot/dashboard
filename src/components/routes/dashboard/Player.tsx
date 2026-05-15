@@ -82,7 +82,7 @@ const Player: Component = () => {
           }</span>
       </span>
       <div style="display: flex; flex-direction: row; justify-content: center; opacity: 0.5">
-        <button class={player.paused ? "btn btn-play btn-pbt" : "btn btn-play btn-pbt hidden"} style="margin-right: 0.5rem;" disabled onClick={() => {
+        <button class={player.paused ? "btn btn-play btn-pbt" : "btn btn-play btn-pbt hidden"} style="margin-right: 0.5rem;" onClick={() => {
           invokeControl(resume);
         }}>
           <i class="fa-solid fa-play" style="color: #e9196c"></i>

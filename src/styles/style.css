@@ -1,43 +1,153 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap');
 @import "tailwindcss";
+@import "./components/navbar.css";
 
 * {
   font-family: 'Cairo', sans-serif;
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
 }
 
 body {
   min-height: 100vh;
   position: relative;
-  padding-bottom: 4rem;
   background-color: rgb(17 24 39);
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-footer {
+
+/* ================================================
+   GLOBAL INPUT OVERRIDE — dark theme
+   ================================================ */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="search"] {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.75rem 1rem;
+  border-radius: 0.65rem;
+  font-size: 0.88rem;
+  color: #fff;
+  font-family: 'Cairo', sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus {
+  border-color: rgba(219, 39, 119, 0.4);
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.08);
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="url"]::placeholder,
+input[type="search"]::placeholder {
+  color: rgb(107, 114, 128);
+}
+
+/* Screen reader only utility */
+.sr-only {
   position: absolute;
-  bottom: 0px;
-  /*max-height:*/
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-input[type="text"] {
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
-  margin: 10px 0;
-  padding: 15px;
-  border-radius: 5px;
-  font-size: 16px;
+/* ================================================
+   FOOTER — Dark glassmorphism
+   ================================================ */
+.site-footer {
   width: 100%;
-  max-width: 400px;
-  font-family: 'Open Sans', sans-serif;
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  z-index: 1;
+  margin-top: 2rem;
 }
-/*
-button {
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  text-align: center;
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
 
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
+.footer-inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
 }
-*/
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: rgb(107, 114, 128);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.4rem;
+  color: rgb(107, 114, 128);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ================================================
+   RESPONSIVE – Global
+   ================================================ */
+
+/* Prevent images / media from overflowing */
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Small phones */
+@media screen and (max-width: 480px) {
+  .nav-inner {
+    padding: 0.5rem 1rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+  }
+}
+
+/* Medium phones / small tablets */
+@media screen and (max-width: 640px) {
+  .nav-logo-img {
+    height: 2rem;
+    width: 2rem;
+  }
+}

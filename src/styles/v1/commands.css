@@ -1,0 +1,135 @@
+#category-filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#category-filters button {
+    background-color: #e9196c;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#category-filters button:hover {
+    background-color: #e9196c;
+}
+
+#category-filters button.active {
+    background-color: #e9196c;
+}
+
+/* style for the command table */
+#cmd-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#cmd-table th,
+#cmd-table td {
+    color: white;
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#cmd-table th {
+    background-color: #e9196c;
+    color: white;
+}
+
+/* style for the command rows */
+#cmd-table tbody tr {
+    transition: background-color 0.3s;
+}
+
+#cmd-table tbody tr:hover {
+    background-color: #e9196c;
+}
+
+/* styles for the different command categories */
+tr.music {
+    background-color: #172333;
+}
+
+table, th, td {
+  border: 1px solid white;
+  color: white;
+}
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+}
+header {
+    background-color: #172333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+    width: 100%;
+    position: fixed;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1px 100px;
+}
+
+
+.logo {
+    text-decoration: none;
+    color: #fcfcfc;
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 1.7em;
+}
+
+br {
+    background-color: #172333;
+}
+
+/* style for the search input */
+#search {
+    background-color: #e9196c;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#search::placeholder {
+    color: white;
+  }
+
+/* style for the category filter buttons */
+#category-filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#category-filters button {
+    background-color: #e9196c;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#category-filters button:hover {
+    background-color: #e9196c;
+}
+
+#category-filters button.active {
+    background-color: #e9196c;
+}

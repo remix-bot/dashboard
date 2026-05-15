@@ -1,135 +1,451 @@
-#category-filters {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+/* COMMANDS PAGE — Glassmorphism card-based design */
+
+/* ── Page wrapper ── */
+.cmd-page {
+  position: relative;
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  overflow: hidden;
 }
 
-#category-filters button {
-    background-color: #e9196c;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin-right: 10px;
-    cursor: pointer;
+/* ── Decorative orbs ── */
+.cmd-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
 }
 
-#category-filters button:hover {
-    background-color: #e9196c;
+.cmd-orb--1 {
+  width: 400px;
+  height: 400px;
+  background: rgba(219, 39, 119, 0.08);
+  top: -10%;
+  right: -8%;
+  animation: cmd-orb-float 18s ease-in-out infinite alternate;
 }
 
-#category-filters button.active {
-    background-color: #e9196c;
+.cmd-orb--2 {
+  width: 320px;
+  height: 320px;
+  background: rgba(99, 102, 241, 0.07);
+  bottom: 10%;
+  left: -8%;
+  animation: cmd-orb-float 22s ease-in-out infinite alternate-reverse;
 }
 
-/* style for the command table */
-#cmd-table {
-    width: 100%;
-    border-collapse: collapse;
+@keyframes cmd-orb-float {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(25px, -30px); }
 }
 
-#cmd-table th,
-#cmd-table td {
-    color: white;
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+/* ── Page header ── */
+.cmd-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 2rem;
+  z-index: 1;
 }
 
-#cmd-table th {
-    background-color: #e9196c;
-    color: white;
+.cmd-header__glow {
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12rem;
+  height: 6rem;
+  background: radial-gradient(ellipse, rgba(219, 39, 119, 0.12) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-/* style for the command rows */
-#cmd-table tbody tr {
-    transition: background-color 0.3s;
+.cmd-header__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.85rem;
+  background: rgba(219, 39, 119, 0.12);
+  color: rgb(219, 39, 119);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 0 1px rgba(219, 39, 119, 0.08) inset;
 }
 
-#cmd-table tbody tr:hover {
-    background-color: #e9196c;
+.cmd-header__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 0.4rem 0;
+  letter-spacing: -0.025em;
 }
 
-/* styles for the different command categories */
-tr.music {
-    background-color: #172333;
+.cmd-header__subtitle {
+  font-size: 0.9rem;
+  color: rgb(156, 163, 175);
+  margin: 0 0 0.75rem 0;
 }
 
-table, th, td {
-  border: 1px solid white;
-  color: white;
-}
-th, td {
-  padding: 0.75rem;
-  text-align: left;
-}
-header {
-    background-color: #172333;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
-    width: 100%;
-    position: fixed;
-    z-index: 999;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1px 100px;
+.cmd-header__count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.3rem 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 9999px;
+  font-size: 0.8rem;
 }
 
-
-.logo {
-    text-decoration: none;
-    color: #fcfcfc;
-    text-transform: uppercase;
-    font-weight: 800;
-    font-size: 1.7em;
+.cmd-header__count-num {
+  font-weight: 700;
+  color: rgb(219, 39, 119);
 }
 
-br {
-    background-color: #172333;
+.cmd-header__count-label {
+  color: rgb(107, 114, 128);
 }
 
-/* style for the search input */
-#search {
-    background-color: #e9196c;
-    color: white;
-    padding: 10px;
-    width: 100%;
-    margin-bottom: 10px;
-    font-size: 16px;
-    border-radius: 5px;
+/* ── Toolbar (search + filters) ── */
+.cmd-toolbar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
 }
 
-#search::placeholder {
-    color: white;
+/* Search input */
+.cmd-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cmd-search__icon {
+  position: absolute;
+  left: 0.85rem;
+  color: rgb(107, 114, 128);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.cmd-search input[type="text"] {
+  width: 100%;
+  background: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.75rem;
+  padding: 0.8rem 2.75rem 0.8rem 2.75rem;
+  font-size: 0.88rem;
+  color: #fff;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0;
+}
+
+.cmd-search input[type="text"]::placeholder {
+  color: rgb(107, 114, 128);
+}
+
+.cmd-search input[type="text"]:focus {
+  outline: none;
+  border-color: rgba(219, 39, 119, 0.4);
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.08);
+}
+
+.cmd-search input[type="text"]:focus ~ .cmd-search__icon,
+.cmd-search input[type="text"]:focus + .cmd-search__icon {
+  color: rgb(219, 39, 119);
+}
+
+.cmd-search__clear {
+  position: absolute;
+  right: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: rgb(107, 114, 128);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  text-transform: none;
+  font-weight: normal;
+}
+
+.cmd-search__clear:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* Category filters */
+.cmd-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cmd-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgb(156, 163, 175);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  text-transform: none;
+}
+
+.cmd-filter:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.cmd-filter--active {
+  background: rgba(219, 39, 119, 0.12) !important;
+  border-color: rgba(219, 39, 119, 0.3) !important;
+  color: rgb(219, 39, 119) !important;
+}
+
+.cmd-filter--active:hover {
+  background: rgba(219, 39, 119, 0.18) !important;
+  color: rgb(236, 72, 153) !important;
+}
+
+/* ── Command card list ── */
+.cmd-list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+/* When empty, make the list area take remaining space and center */
+.cmd-list:has(.cmd-empty) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+}
+
+/* ── Command card ── */
+.cmd-card {
+  background: rgba(17, 24, 39, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  padding: 1rem 1.15rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cmd-card:hover {
+  background: rgba(17, 24, 39, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Card header (name + aliases) */
+.cmd-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.cmd-card__name-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.15rem;
+}
+
+.cmd-card__prefix {
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgb(219, 39, 119);
+  opacity: 0.7;
+}
+
+.cmd-card__name {
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Aliases */
+.cmd-card__aliases {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.cmd-card__alias {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.3rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.7rem;
+  color: rgb(107, 114, 128);
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+}
+
+/* Description */
+.cmd-card__desc {
+  font-size: 0.82rem;
+  color: rgb(156, 163, 175);
+  line-height: 1.5;
+  margin: 0 0 0.35rem 0;
+}
+
+/* Usage */
+.cmd-card__usage {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 0.4rem;
+  margin-top: 0.15rem;
+}
+
+.cmd-card__usage svg {
+  color: rgb(107, 114, 128);
+  flex-shrink: 0;
+}
+
+.cmd-card__usage code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgb(209, 213, 219);
+}
+
+/* ── Empty state ── */
+.cmd-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cmd-empty__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgb(107, 114, 128);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.cmd-empty__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.35rem 0;
+}
+
+.cmd-empty__desc {
+  font-size: 0.82rem;
+  color: rgb(107, 114, 128);
+  margin: 0;
+}
+
+/* ── Override global styles ── */
+.cmd-page button {
+  text-transform: none;
+  font-weight: inherit;
+}
+
+.cmd-page button:hover {
+  background-color: transparent;
+}
+
+/* ── Responsive: 2-col grid on wide screens ── */
+@media screen and (min-width: 720px) {
+  .cmd-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .cmd-page {
+    padding: 2.5rem 1.5rem 3rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .cmd-page {
+    padding: 1.5rem 1rem 2rem;
   }
 
-/* style for the category filter buttons */
-#category-filters {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+  .cmd-header__title {
+    font-size: 1.6rem;
+  }
+
+  .cmd-header__icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1rem;
+  }
+
+  .cmd-filters {
+    gap: 0.35rem;
+  }
+
+  .cmd-filter {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.72rem;
+  }
+
+  .cmd-card {
+    padding: 0.85rem 1rem;
+  }
+
+  .cmd-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
 }
 
-#category-filters button {
-    background-color: #e9196c;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin-right: 10px;
-    cursor: pointer;
-}
-
-#category-filters button:hover {
-    background-color: #e9196c;
-}
-
-#category-filters button.active {
-    background-color: #e9196c;
+/* Hide large orbs on mobile for performance */
+@media screen and (max-width: 768px) {
+  .cmd-orb {
+    display: none;
+  }
 }

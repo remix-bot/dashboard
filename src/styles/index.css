@@ -1,26 +1,655 @@
-* {
+@import "./components/animations.css";
+/* ================================================
+   GLOBAL – smooth scroll & base
+   ================================================ */
+html {
   scroll-behavior: smooth;
 }
-.floating {
-  animation-name: floating;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
+
+
+/* ================================================
+   HERO section
+   ================================================ */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 7rem;
+  padding-bottom: 2rem;
+  position: relative;
+  /*overflow: hidden;*/
 }
-@keyframes floating {
-  0% { transform: translate(0,  0px); }
-  50%  { transform: translate(0, 15px); }
-  100%   { transform: translate(0, -0px); }
+
+.hero__inner {
+  text-align: center;
+  padding: 2rem 1rem 0;
+  position: relative;
+  z-index: 1;
 }
+
+/* subtle pink glow behind the icon */
+.hero__glow {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14rem;
+  height: 14rem;
+  background: radial-gradient(circle, rgba(219, 39, 119, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero__icon {
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 100%;
+  height: 11rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero__title {
+  font-weight: 800;
+  color: white;
+  font-size: 3.75rem;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.hero__subtitle {
+  color: rgb(156, 163, 175);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero__subtitle strong {
+  color: white;
+}
+
+.hero__actions {
+  font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+  margin-top: 1.5rem;
+}
+
+/* scroll hint arrow */
+.hero__scroll-hint {
+  display: flex;
+  justify-content: center;
+  color: rgb(156, 163, 175);
+  text-decoration: none;
+  margin-top: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.hero__scroll-hint:hover {
+  color: rgb(219, 39, 119);
+}
+
+.hero__scroll-hint svg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+/* ================================================
+   Platform pills
+   ================================================ */
+.platform-pills {
+  display: inline-flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.platform-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(156, 163, 175);
+  background: rgba(55, 65, 81, 0.5);
+  border: 1px solid rgb(55, 65, 81);
+  border-radius: 9999px;
+  padding: 0.3rem 0.75rem;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.platform-pill__logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.platform-pill:hover {
+  border-color: rgb(219, 39, 119);
+  color: rgb(219, 39, 119);
+}
+
+/* ================================================
+   CTA buttons (invite / support)
+   ================================================ */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.cta-btn:active {
+  transform: scale(0.97);
+}
+
+.cta-btn--primary {
+  color: white;
+  background-color: rgb(219, 39, 119);
+  box-shadow: 0 4px 14px rgba(219, 39, 119, 0.25);
+}
+
+.cta-btn--primary:hover {
+  background-color: rgb(190, 24, 100);
+  box-shadow: 0 6px 20px rgba(219, 39, 119, 0.35);
+}
+
+.cta-btn--secondary {
+  color: white;
+  background-color: transparent;
+  border: 1px solid rgb(55, 65, 81);
+}
+
+.cta-btn--secondary:hover {
+  background-color: rgb(55, 65, 81);
+}
+
+/* ================================================
+   Dropdown (invite) — Glassmorphism redesign
+   ================================================ */
+.dropdown-wrap {
+  position: relative;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 210px;
+  background: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  z-index: 30;
+  overflow: hidden;
+  padding: 0.35rem;
+}
+
+/* subtle pink accent line at top */
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(219, 39, 119, 0.5), transparent);
+}
+
+.dropdown--open {
+  display: block;
+  animation: dropdown-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 0.85rem;
+  color: rgb(156, 163, 175);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.dropdown-item svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item__logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(219, 39, 119, 0.08);
+  color: #fff;
+}
+
+.dropdown-item:hover svg {
+  opacity: 1;
+  color: rgb(219, 39, 119);
+}
+
+.dropdown-item:hover .dropdown-item__logo {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.dropdown-item:first-child {
+  margin-bottom: 0.2rem;
+}
+
+/* ================================================
+   SECTIONS (About / Features / Team)
+   ================================================ */
+.section {
+  padding: 5rem 1rem;
+}
+
+.section__inner {
+  max-width: 52rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section__header {
+  margin-bottom: 2.5rem;
+}
+
+.section__title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem 0;
+}
+
+/* small pink accent line under headings */
+.section__accent {
+  width: 3rem;
+  height: 3px;
+  background: rgb(219, 39, 119);
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+/* ================================================
+   GRADIENT DIVIDER
+   ================================================ */
+.divider {
+  height: 1px;
+  max-width: 28rem;
+  margin: 0 auto;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(55, 65, 81) 30%,
+    rgb(55, 65, 81) 70%,
+    transparent 100%
+  );
+}
+
+/* ================================================
+   ABOUT section body text
+   ================================================ */
+.about-body {
+  max-width: 42rem;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgb(156, 163, 175);
+}
+
+/* ================================================
+   FEATURE cards grid
+   ================================================ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.25rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: rgb(31, 41, 55);
+  border: 1px solid rgb(55, 65, 81);
+  border-radius: 0.75rem;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: rgb(219, 39, 119);
+  box-shadow: 0 8px 30px rgba(219, 39, 119, 0.1);
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  background: rgba(219, 39, 119, 0.12);
+  color: rgb(219, 39, 119);
+  margin-bottom: 1rem;
+}
+
+.feature-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.feature-desc {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: rgb(156, 163, 175);
+}
+
+/* ================================================
+   TEAM members — Clean minimal design
+   ================================================ */
+.team-grid {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.team-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 2rem 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 14rem;
+}
+
+.team-member:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Avatar with ring + hover socials ── */
+.team-member__avatar-wrap {
+  position: relative;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.team-member__avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gradient ring around avatar */
+.team-member__avatar-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(219, 39, 119, 0.5), rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.team-member:hover .team-member__avatar-ring {
+  opacity: 1;
+}
+
+/* Social links overlay on avatar hover */
+.team-member__socials {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.team-member:hover .team-member__socials {
+  opacity: 1;
+}
+
+.team-member__social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.team-member__social:hover {
+  background: rgb(219, 39, 119);
+  transform: scale(1.1);
+}
+
+/* ── Name ── */
+.team-member__name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+/* ── Info container ── */
+.team-member__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Role badge ── */
+.team-member__role {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgb(219, 39, 119);
+  background: rgba(219, 39, 119, 0.08);
+  border: 1px solid rgba(219, 39, 119, 0.15);
+  border-radius: 9999px;
+  padding: 0.2rem 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+/* ── Inline social links (mobile fallback / always visible) — hidden on desktop ── */
+.team-member__links-inline {
+  display: none;
+  gap: 0.4rem;
+}
+
+.team-member__links-inline a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(107, 114, 128);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.team-member__links-inline a:hover {
+  color: rgb(219, 39, 119);
+}
+
+/* ================================================
+   Responsive
+   ================================================ */
 @media screen and (max-width: 740px) {
-  #teamContainer {
+  .hero__title {
+    font-size: 2.75rem;
+  }
+
+  .hero__icon {
+    height: 8rem;
+  }
+
+  .hero__glow {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .section {
+    padding: 3.5rem 1rem;
+  }
+
+  .section__title {
+    font-size: 1.75rem;
+  }
+
+  .team-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .team-member {
+    width: 100%;
+    max-width: 22rem;
+    flex-direction: row;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    text-align: left;
+  }
+
+  .team-member:hover {
+    transform: translateY(-2px);
+  }
+
+  .team-member__avatar-wrap {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  /* Hide hover overlay on mobile, show inline links instead */
+  .team-member__socials {
+    display: none !important;
+  }
+
+  .team-member__info {
+    align-items: flex-start;
+    gap: 0.35rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .team-member__name {
+    text-align: left;
+  }
+
+  .team-member__links-inline {
+    display: flex;
+    margin-top: 0.15rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    max-width: 20rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero__title {
+    font-size: 2.25rem;
+  }
+
+  .hero__icon {
+    height: 6rem;
+  }
+
+  .hero__glow {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  /* dropdown already centered by default — no override needed */
+
+  .hero__actions {
     flex-direction: column;
     align-items: center;
   }
-}
-.padding {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+
+  .hero__actions > * {
+    width: 100%;
+    max-width: 16rem;
+    justify-content: center;
+  }
+
+  .cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .section__title {
+    font-size: 1.5rem;
+  }
+
+  .about-body {
+    font-size: 0.95rem;
+  }
 }
