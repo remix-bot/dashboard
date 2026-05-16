@@ -11,7 +11,7 @@ import AutocompleteSearch from "./AutocompleteSearch";
 
 const Player: Component = () => {
   const { user } = ensureAuth();
-  const { player, skip, pause, resume, setVol, addQuery } = useVoice();
+  const { player, channel, skip, pause, resume, setVol, addQuery } = useVoice();
   const { addError, addInfo } = useNotifications();
   const [elapsedTime, setElapsedTime] = createSignal<string>("00:00");
   const [controlsBlocked, setControlsBlocked] = createSignal(true);
@@ -27,7 +27,7 @@ const Player: Component = () => {
   });
 
   createEffect(() => {
-    setControlsBlocked(player.started === 0);
+    setControlsBlocked(!channel());
   });
 
   createEffect(() => {
