@@ -7,10 +7,11 @@ import { ensureAuth } from "../../../lib/providers/auth/AuthProvider";
 import { Utils } from "../../../lib/util/Utils";
 import { GenericAPIResponse } from "../../../lib/types/APITypes";
 import { useNotifications } from "../../../lib/providers/notifications/NotificationProvider";
+import AutocompleteSearch from "./AutocompleteSearch";
 
 const Player: Component = () => {
   const { user } = ensureAuth();
-  const { player, skip, pause, resume, setVol } = useVoice();
+  const { player, skip, pause, resume, setVol, addQuery } = useVoice();
   const { addError, addInfo } = useNotifications();
   const [elapsedTime, setElapsedTime] = createSignal<string>("00:00");
   const [controlsBlocked, setControlsBlocked] = createSignal(true);
@@ -111,39 +112,10 @@ const Player: Component = () => {
           <i class="fa-solid fa-volume-high" style="float:left;color: #e9196c" id="volumeIcon"></i>
         </div>
       </div>
-      <div style="position: relative; display: flex; flex-direction: column" class="search-container">
-        <input type="text" name="search" placeholder="Search or paste a link" autocomplete="off" id="search"
-          style="margin: 10px 0 0;
-            padding: 5px;
-            padding-left: 7px;
-            padding-right: 7px;
-            align-self: center;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            width: 100%;
-            max-width: 400px;
-            background-color: rgb(19, 25, 39);
-            border-color: #bbb;
-            transition: all 0.2s ease-in-out;"
-          disabled={controlsBlocked()} />
-        <div style="position: relative; align-self: center; width: 100%">
-          <ul id="completions" style="
-            background-color: rgb(19, 25, 39);
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
-            border-radius: 5px;/*0 0 5px 5px;*/
-            position: absolute;
-            display: none;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            algin-self: center;
-            width: 100%;
-            max-width: 400px;
-            padding: 5px">
-          </ul>
-        </div>
-      </div>
+        <AutocompleteSearch disabled={controlsBlocked()} callback={(query: string) => {
+          // @ts-ignore
+          invokeControl(addQuery, query);
+        }}></AutocompleteSearch>
       <a style="position: absolute; top:1rem; right: 1rem; text-decoration: none;" class="player-maximise" href="javascript:void(0);"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></a>
     </div>
       <Queue></Queue>

@@ -1,3 +1,7 @@
+.completion-results:empty {
+  display: none;
+}
+
 .main-container {
   display: flex;
   justify-content: space-between;
