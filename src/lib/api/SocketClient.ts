@@ -39,6 +39,9 @@ export class SocketClient extends EventEmitter {
       this.onAuth(data.data.data as APIUser);
       return;
     }
+    if (data.op === OP.PING) {
+      return;
+    }
     if (data.op !== OP.MSG) {
       console.warn("Unknown OP code: ", data);
       return;

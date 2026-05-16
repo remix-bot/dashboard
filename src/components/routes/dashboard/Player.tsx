@@ -13,6 +13,7 @@ const Player: Component = () => {
   const { player, skip, pause, resume, setVol } = useVoice();
   const { addError, addInfo } = useNotifications();
   const [elapsedTime, setElapsedTime] = createSignal<string>("00:00");
+  const [controlsBlocked, setControlsBlocked] = createSignal(true);
   var current = 0;
   var interval: number | undefined;
   const updateTimestamp = () => {
@@ -22,6 +23,10 @@ const Player: Component = () => {
   createEffect(() => {
     current = ((user()?.player?.playing) ? user()!.player!.elapsedTime : 0) * 1000;
     updateTimestamp();
+  });
+
+  createEffect(() => {
+    setControlsBlocked(player.started === 0);
   });
 
   createEffect(() => {
@@ -82,23 +87,23 @@ const Player: Component = () => {
           }</span>
       </span>
       <div style="display: flex; flex-direction: row; justify-content: center; opacity: 0.5">
-        <button class={player.paused ? "btn btn-play btn-pbt" : "btn btn-play btn-pbt hidden"} style="margin-right: 0.5rem;" onClick={() => {
+        <button disabled={controlsBlocked()} class={player.paused ? "btn btn-play btn-pbt" : "btn btn-play btn-pbt hidden"} style="margin-right: 0.5rem;" onClick={() => {
           invokeControl(resume);
         }}>
           <i class="fa-solid fa-play" style="color: #e9196c"></i>
         </button>
-        <button class={!player.paused ? "btn btn-play btn-pbt" : "btn btn-play btn-pbt hidden"} onClick={() => {
+        <button disabled={controlsBlocked()} class={!player.paused ? "btn btn-play btn-pbt" : "btn btn-play btn-pbt hidden"} onClick={() => {
           invokeControl(pause);
         }}>
           <i class="fa-solid fa-pause" style="color: #e9196c; margin-right: 0.5rem;"></i>
         </button>
-        <button class="btn btn-skip btn-pbt" disabled onClick={() => {
+        <button class="btn btn-skip btn-pbt" disabled={controlsBlocked()} onClick={() => {
           invokeControl(skip);
         }}>
           <i class="fa-solid fa-forward" style="color: #e9196c"></i>
         </button>
         <div class="slidecontainer" style="margin-left: 0.5rem; display: flex; flex-direction: row; align-items: center; gap: 0.2rem" title="100%">
-          <input type="range" style="accent-color: #e9196c; background: #e9196c" class="slider" value={player.volume * 100} min="0" max="100" id="volumeSlider" onChange={(e) => {
+          <input disabled={controlsBlocked()} type="range" style="accent-color: #e9196c; background: #e9196c" class="slider" value={player.volume * 100} min="0" max="100" id="volumeSlider" onChange={(e) => {
               const val = e.currentTarget.value;
               // @ts-ignore
               invokeControl(setVol, val / 100);
@@ -121,7 +126,7 @@ const Player: Component = () => {
             background-color: rgb(19, 25, 39);
             border-color: #bbb;
             transition: all 0.2s ease-in-out;"
-          disabled/>
+          disabled={controlsBlocked()} />
         <div style="position: relative; align-self: center; width: 100%">
           <ul id="completions" style="
             background-color: rgb(19, 25, 39);

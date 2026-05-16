@@ -35,6 +35,7 @@ export class User extends EventEmitter {
     const res = await this.client.authorisedGet("/player/" + channel);
     console.log("player", res);
     this.player = new Player(res);
+    this.emit("playerUpdate", this.player);
     this.emit("join", this.player);
   }
   setupEvents() {
