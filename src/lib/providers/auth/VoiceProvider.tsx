@@ -28,6 +28,7 @@ export type VoiceContextType = {
   skip: () => Promise<GenericAPIResponse>;
 
   addQuery: (query: string) => Promise<GenericAPIResponse>;
+  leave: (channel: string) => Promise<GenericAPIResponse>;
 }
 
 export const VoiceContext = createContext<VoiceContextType>();
@@ -63,6 +64,11 @@ const VoiceProvider: ParentComponent = (props) => {
     return await api.post("/dashboard/queue", {
       query
     });
+  }
+
+  const leave = async  (c: string) => {
+    if ((user()?.connectedTo.length || 0) === 0) return { error: "Not connected to a voice channel" };
+    return await api.post("/voice/" + c + "/leave");
   }
 
   const setVol = async (v: number) => {
@@ -145,7 +151,8 @@ const VoiceProvider: ParentComponent = (props) => {
     pause,
     skip,
     resume,
-    addQuery
+    addQuery,
+    leave
   }}>
     {props.children}
   </VoiceContext.Provider>
