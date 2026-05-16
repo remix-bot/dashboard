@@ -41,6 +41,7 @@ export class User extends EventEmitter {
   setupEvents() {
     const closeJoin = this.client.socket?.on("join", (data: SerialisedPlayer) => {
       this.player = new Player(data);
+      this.connectedTo[0] = this.player.channel.id;
       this.emit("playerUpdate", this.player);
       this.emit("join", this.player);
     });
