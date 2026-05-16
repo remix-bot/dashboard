@@ -457,6 +457,9 @@
   color: rgb(156, 163, 175);
   line-height: 1.4;
 }
+.login-verify-step > span {
+  text-align: left;
+}
 
 .login-verify-step__num {
   display: inline-flex;
