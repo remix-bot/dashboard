@@ -6,6 +6,7 @@ import { Accessor } from "solid-js";
 import { redirect, useLocation, useNavigate } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 import { Player, SerialisedChannel } from "../../api/Player";
+import { NotificationController, useNotifications } from "../notifications/NotificationProvider";
 
 type AuthContextType = {
   api: APIClient;
@@ -44,9 +45,22 @@ export enum AuthState {
 }
 
 const AuthProvider: ParentComponent = (props) => {
+  const { addError } = useNotifications();
+
   const client = new APIClient();
   const [user, setUser] = createSignal<User | undefined>(undefined);
   const [state, setState] = createSignal<AuthState>(AuthState.CONNECTING);
+
+  var errorNotif: NotificationController | undefined;
+  client.on("platformDisconnected", () => {
+    if (!errorNotif) errorNotif = addError("Platform Disconnected", "Your chosen authentication platform is offline. The bot process might be down. Please wait a few minutes.", -1);
+  });
+  createEffect(() => {
+    state();
+    if (!errorNotif) return;
+    errorNotif.remove();
+    errorNotif = undefined;
+  });
 
   /*client.connect("499d07b8bee68980f9ce25f98496ee9e", "MN7Y8VQYH15YHEXSV1I").then((success) => {
     console.log(success, client.user);

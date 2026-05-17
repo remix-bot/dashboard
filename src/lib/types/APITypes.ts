@@ -25,7 +25,8 @@ export enum AccountType {
 }
 export type AuthResponse = {
   user?: APIUser,
-  accountType: AccountType
+  accountType: AccountType,
+  platformConnected: boolean
 }
 export type GenericAPIResponse = {
   error?: string,

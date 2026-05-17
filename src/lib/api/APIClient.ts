@@ -14,6 +14,8 @@ export class APIClient extends EventEmitter {
   authenticated = false;
   type: AccountType = AccountType.STOAT;
 
+  RECONNECT_TIMEOUT = 3000;
+
   userId?: string;
   user?: User;
   constructor() {
@@ -25,6 +27,14 @@ export class APIClient extends EventEmitter {
     this.tokenId = tokenId;
 
     const res = await this.get("/info", this.createHeaders()) as AuthResponse;
+    if (!res.platformConnected) {
+      this.emit("platformDisconnected");
+      return await (() => new Promise(res => {
+        setTimeout(async () => {
+          res(await this.connect(apiToken, tokenId));
+        }, this.RECONNECT_TIMEOUT);
+      }))();
+    }
     if (!res.user) {
       this.token = this.tokenId = undefined;
       return false
