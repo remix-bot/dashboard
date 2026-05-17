@@ -1,25 +1,22 @@
 import "../../../styles/notifications.css";
 
-import { createSignal, For, ParentComponent, useContext } from "solid-js";
+import { createEffect, createSignal, For, ParentComponent, useContext } from "solid-js";
 import { createContext } from "solid-js"
 import NotificationElement, { NotificationElementProps } from "./NotificationElement";
 import { JSX } from "solid-js";
 
 export type NotificationContextType = {
-  addInfo: (title: string, description: string, time?: number) => {
-      title: string;
-      description: string;
-      time: number;
-      type: NotificationType;
-      id: string;
-  };
-  addError: (title: string, description: string, time?: number) => {
-      title: string;
-      description: string;
-      time: number;
-      type: NotificationType;
-      id: string;
-  };
+  addInfo: (title: string, description: string, time?: number) => NotificationController;
+  addError: (title: string, description: string, time?: number) => NotificationController;
+}
+
+export type NotificationController = {
+  title: string;
+  description: string;
+  time: number;
+  type: NotificationType;
+  id: string;
+  remove: () => void;
 }
 
 export const NotificationContext = createContext<NotificationContextType>();
@@ -56,7 +53,7 @@ const NotificationProvider: ParentComponent = (props) => {
       const notifs = [...prev];
       const idx = notifs.findIndex(e => e.id === notif.id);
       if (idx === -1) return notifs;
-      notif.id = Math.random().toString().replaceAll(".", "");
+      //notif.id = Math.random().toString().replaceAll(".", "");
       notifs[idx] = notif;
       return notifs;
     });
@@ -68,7 +65,7 @@ const NotificationProvider: ParentComponent = (props) => {
     replaceNotif(notif);
   }
 
-  const addNotification = (title: string, description: string, time: number, type: NotificationType) => {
+  const addNotification = (title: string, description: string, time: number, type: NotificationType): NotificationController => {
     const id = Math.random().toString().replaceAll(".", "");
     //const el = <NotificationElement onRemove={handleRemove} id={id} description={description} time={time || 5000} title={title} type={type} />;
     const data = {
@@ -77,6 +74,7 @@ const NotificationProvider: ParentComponent = (props) => {
       title,
       time: time || 5000,
       type,
+      removeSignal: false,
       onRemove: handleRemove
     }
 
@@ -112,13 +110,21 @@ const NotificationProvider: ParentComponent = (props) => {
       set type(t: NotificationType) {
         setValue(this.id, "type", t);
       },
+      remove: function() {
+        setValue(this.id, "removeSignal", true);
+      },
       id
     }
   }
-
+  /**
+   * Use a negative time to prevent automatic expiry
+   */
   const addInfo = (title: string, description: string, time?: number) => {
     return addNotification(title, description, time || 5000, NotificationType.INFO);
   }
+  /**
+   * Use a negative time to prevent automatic expiry
+   */
   const addError = (title: string, description: string, time?: number) => {
     return addNotification(title, description, time || 5000, NotificationType.ERROR);
   }
@@ -136,7 +142,7 @@ const NotificationProvider: ParentComponent = (props) => {
     <div class="notifications">
       <For each={notifications()}>
         {(notif) => {
-          return <NotificationElement description={notif.description} id={notif.id} onRemove={notif.onRemove} title={notif.title} type={notif.type} time={notif.time}></NotificationElement>
+          return <NotificationElement description={notif.description} id={notif.id} onRemove={notif.onRemove} title={notif.title} type={notif.type} time={notif.time} removeSignal={notif.removeSignal}></NotificationElement>
         }}
       </For>
     </div>

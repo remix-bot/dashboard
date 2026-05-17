@@ -8,6 +8,7 @@ export type NotificationElementProps = {
   time?: number, // in ms
   onRemove: (id: string) => void,
   id: string,
+  removeSignal?: boolean
 }
 
 const NotificationElement: Component<NotificationElementProps> = (props) => {
@@ -21,10 +22,15 @@ const NotificationElement: Component<NotificationElementProps> = (props) => {
   var timeout: number | null = null;
   const resetTimer = () => {
     if (timeout) clearTimeout(timeout);
+    if ((props.time || 5000) < 0) return;
     timeout = setTimeout(() => {
       remove();
     }, props.time);
   }
+
+  createEffect(() => {
+    if (props.removeSignal) return remove();
+  });
 
   createEffect(() => {
     // subscribe to all prop changes
