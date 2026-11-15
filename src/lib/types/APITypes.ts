@@ -21,7 +21,7 @@ export type APIServer = {
 
 export enum AccountType {
   STOAT = "stoat",
-  FLUXER = "Fluxer"
+  FLUXER = "fluxer"
 }
 export type AuthResponse = {
   user?: APIUser,

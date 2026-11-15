@@ -78,10 +78,6 @@ const Player: Component = () => {
     <div style="display: flex; justify-content: center; height: 100%; flex-grow: 2; grid-row: 1; grid-column-start: 2; grid-column-end: 4;" class="player-info">
       <h1 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">Currently Playing</h1>
         <p style="font-size: 1rem; margin-bottom: 1rem;"><span id="song">{player.queue.current?.title}</span> - <span id="artist">{player.queue.current?.artist.name}</span></p>
-        {/* remove from here */}
-        <p>The Player is not functional at the moment. Please be patient as we migrate to our new tech stack.</p>
-        <br />
-        {/* to here */}
       <span>
           <span id="elapsedTime">{elapsedTime()}</span>/<span id="duration">{
             player.queue.current?.duration || "00:00"

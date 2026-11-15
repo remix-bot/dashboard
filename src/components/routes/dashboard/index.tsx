@@ -29,7 +29,7 @@ const Dashboard: Component = () => {
     </div>
     <p>
       Please note that the dashboard is experimental at the moment and that things might not work the way you expect them to. <br />
-      Feel free to report bugs on our <a href={import.meta.env.VITE_SUPPORT_INVITE} style="text-decoration: underline" target="_blank">Revolt Server <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+      Feel free to report bugs on our <a href={import.meta.env.VITE_FLUXER_SUPPORT_INVITE || "https://fluxer.gg/remix"} style="text-decoration: underline" target="_blank" rel="noopener noreferrer">Fluxer Community <i class="fa-solid fa-arrow-up-right-from-square"></i></a> or <a href={import.meta.env.VITE_SUPPORT_INVITE || "http://rvlt.gg/Remix"} style="text-decoration: underline" target="_blank" rel="noopener noreferrer">Stoat Server <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
     </p>
   </section>
   </>
