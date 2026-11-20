@@ -24,7 +24,7 @@ const Queue: Component = () => {
                 <img alt="song cover" src={vid.thumbnail || icon} style="aspect-ratio: 1 / 1; height: 100%; border-radius: 5px; object-fit: cover" />
                 <div style="flex-grow: 3; display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem">
                   <span style="font-size: 1.1rem">{vid.title}</span>
-                  <span style="font-size: 0.8rem">{vid.artist.name}</span>
+                  <span style="font-size: 0.8rem">{vid.artist?.name || ""}</span>
                 </div>
                 <p style="align-self: center">{vid.duration}</p>
               </div>

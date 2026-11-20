@@ -1,4 +1,4 @@
-import { createContext, useContext, ParentComponent, createEffect, Accessor, createSignal } from "solid-js";
+import { createContext, useContext, ParentComponent, createEffect, onCleanup, Accessor, createSignal } from "solid-js";
 import { useAuth } from "./AuthProvider";
 import { Player, SerialisedChannel, SerialisedQueue } from "../../api/Player";
 import { createStore } from "solid-js/store";
@@ -97,20 +97,18 @@ const VoiceProvider: ParentComponent = (props) => {
     });
   }
 
-  const init = (u: User) => {
-    u.on("join", (player: Player) => {
+  createEffect(() => {
+    const u = user();
+    if (!u) return;
+    const subJoin = u.on("join", (player: Player) => {
       setChannel(player.channel);
     });
-    u.on("leave", (channel: string) => {
+    const subLeave = u.on("leave", (_channel: string) => {
       setChannel(null);
       setPlayer({
         loop: 0,
         paused: false,
         volume: 100,
-        /*queue: {
-          current: null,
-          data: []
-          },*/
         started: 0,
         timeDiff: 0,
         queue: {
@@ -119,29 +117,19 @@ const VoiceProvider: ParentComponent = (props) => {
         }
       });
     });
-    u.on("playerUpdate", (p: Player) => {
-      console.log("player", p);
+    const subUpdate = u.on("playerUpdate", (p: Player) => {
       setPlayer("loop", p.loop);
       setPlayer("paused", p.paused);
       setPlayer("volume", p.volume);
       setPlayer("started", p.started);
       setPlayer("timeDiff", p.timeDiff);
       setPlayer("queue", p.queue);
-      /*setPlayer({
-        loop: p.loop,
-        paused: p.paused,
-        volume: p.volume,
-        started: p.started,
-        timeDiff: p.timeDiff,
-        queue: p.queue
-        });*/
     });
-  }
-
-  createEffect(() => {
-    const u = user();
-    if (!u) return;
-    init(u);
+    onCleanup(() => {
+      subJoin.close();
+      subLeave.close();
+      subUpdate.close();
+    });
   });
 
   return <VoiceContext.Provider value={{

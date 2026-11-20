@@ -14,12 +14,20 @@ const ChannelList: Component = () => {
 
   const [servers, setServers] = createSignal<APIServer[]>([]);
   const [loading, setLoading] = createSignal(true);
-  createEffect(async () => {
+  createEffect(() => {
+    const u = user();
+    if (!u) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
-    const s = await user()?.getMutualServers();
-    if (!s) return setLoading(false);
-    setLoading(false);
-    setServers(s);
+    u.getMutualServers().then((s) => {
+      setLoading(false);
+      setServers(Array.isArray(s) ? s : []);
+    }).catch(() => {
+      setLoading(false);
+      setServers([]);
+    });
   });
 
   const [currServer, setCurrServer] = createSignal<APIServer | undefined>();

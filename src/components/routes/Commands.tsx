@@ -31,8 +31,8 @@ const Commands: Component = () => {
   const filteredCommands = () => {
     const q = search().toLowerCase();
     const cat = activeCategory();
-    const cmds = commands() || [];
-    console.log(cmds);
+    const rawCmds = commands();
+    const cmds = Array.isArray(rawCmds) ? rawCmds : [];
     return cmds.filter((cmd: Command) => {
       const matchSearch = !q
         || cmd.name.toLowerCase().includes(q)

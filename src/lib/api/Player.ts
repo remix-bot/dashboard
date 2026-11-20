@@ -68,6 +68,7 @@ export class Player {
 
   /** @description in seconds */
   get elapsedTime() {
+    if (!this.started || this.started === 0) return 0;
     return ((this.paused) ? this.timeDiff : (Date.now() - this.started) + this.timeDiff) / 1000;
   }
   get songLoop() {

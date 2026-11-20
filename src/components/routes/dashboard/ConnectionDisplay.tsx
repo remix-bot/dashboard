@@ -21,7 +21,7 @@ const ConnectionDisplay: Component = () => {
       }</span>
     </p>
     <p>In Server <span id="currs" style="font-weight: bold;">{
-      channel()?.server.name || "-"
+      channel()?.server?.name || "-"
     }</span></p>
   </>
 }

@@ -34,6 +34,7 @@ export class User extends EventEmitter {
     if (!channel) return;
     const res = await this.client.authorisedGet("/player/" + channel);
     console.log("player", res);
+    if (!res || res.error || !res.channel) return;
     this.player = new Player(res);
     this.emit("playerUpdate", this.player);
     this.emit("join", this.player);

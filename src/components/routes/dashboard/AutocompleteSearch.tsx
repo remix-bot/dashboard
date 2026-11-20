@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component, For, Show } from "solid-js";
 import { Utils } from "../../../lib/util/Utils";
 import { createSignal } from "solid-js";
 
@@ -18,29 +18,43 @@ const AutocompleteSearch: Component<AutocompleteSearchProps> = (props) => {
     input.value = "";
   }
 
-  const getSuggestions = (query: string): Promise<string[]> => { // fetch suggestion using JSONP
+  const getSuggestions = (query: string): Promise<string[]> => {
     return new Promise(res => {
       const script = document.createElement("script");
       script.async = true;
       const cname = "suggestion" + (Math.random() + "").replaceAll(".", "");
-      // @ts-ignore
-      window[cname] = (data) => {
-        res(data[1]);
+      const cleanup = () => {
         script.remove();
-        // @ts-ignore
-        delete window[cname];
-      }
-      script.src = "https://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=" + encodeURIComponent(query) + "&callback=" + cname; // "hl" parameter for locale
+        delete (window as any)[cname];
+      };
+      (window as any)[cname] = (data: any) => {
+        cleanup();
+        res(Array.isArray(data?.[1]) ? data[1] : []);
+      };
+      script.onerror = () => {
+        cleanup();
+        res([]);
+      };
+      script.src = "https://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=" + encodeURIComponent(query) + "&callback=" + cname;
       document.head.appendChild(script);
     });
   }
 
   const keyUpSearch = async (val: string) => {
+    if (!val || !val.trim()) {
+      setAutocompletions([]);
+      return;
+    }
     if (runningRequest) return;
     runningRequest = true;
-    const suggestions = await getSuggestions(val);
-    setAutocompletions(suggestions);
-    runningRequest = false;
+    try {
+      const suggestions = await getSuggestions(val);
+      setAutocompletions(suggestions);
+    } catch (_) {
+      setAutocompletions([]);
+    } finally {
+      runningRequest = false;
+    }
   }
 
   const queueSearch = async (query: string) => {
@@ -73,30 +87,32 @@ const AutocompleteSearch: Component<AutocompleteSearchProps> = (props) => {
           keyUpSearch(e.currentTarget.value);
       }}/>
     <div style="position: relative; align-self: center; width: 100%">
-      <ul id="completions" class="completion-results" style="
-        background-color: rgb(19, 25, 39);
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
-        border-radius: 5px;/*0 0 5px 5px;*/
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        algin-self: center;
-        width: 100%;
-        max-width: 400px;
-        padding: 5px">
-          <For each={autocompletions()}>
-            {(text: string) => {
-              return <>
-                <li onClick={() => {
-                  queueSearch(text);
-                  reset();
-                }} class="suggestions-li">{text}</li>
-              </>
-            }}
-          </For>
-      </ul>
-      </div>
+      <Show when={autocompletions().length > 0}>
+        <ul id="completions" class="completion-results" style="
+          background-color: rgb(19, 25, 39);
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+          border-radius: 5px;/*0 0 5px 5px;*/
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          algin-self: center;
+          width: 100%;
+          max-width: 400px;
+          padding: 5px">
+            <For each={autocompletions()}>
+              {(text: string) => {
+                return <>
+                  <li onClick={() => {
+                    queueSearch(text);
+                    reset();
+                  }} class="suggestions-li">{text}</li>
+                </>
+              }}
+            </For>
+        </ul>
+      </Show>
+    </div>
     </div>
   </>
 }

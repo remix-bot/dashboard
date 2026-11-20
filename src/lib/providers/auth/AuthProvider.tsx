@@ -29,9 +29,9 @@ export const useAuth = () => {
 export const ensureAuth = () => {
   const context = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   createEffect(() => {
     if (context.authState() === AuthState.UNAUTHORISED) {
-      const location = useLocation();
       navigate((location.pathname !== "/logout") ? "/login?r=" + location.pathname : "/");
     }
   });

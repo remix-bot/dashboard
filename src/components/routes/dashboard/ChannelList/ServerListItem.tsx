@@ -17,11 +17,6 @@ const ServerListItem: Component<ChannelItemProps> = (props) => {
     props.onChannelClick(props.server, channel);
   }
 
-  if (props.server.icon) {
-    const css = document.getElementById("channelListStyle") as HTMLStyleElement;
-    if (!css) throw "unable to find style element";
-    css.sheet?.insertRule("li[itemid='" + props.server.id + "']::before {content:''; display: inline-block; position: relative; top: 0.4rem; background-image:url(" + props.server.icon + "); background-size: cover; aspect-ratio: 1/1; height: 1.5rem; margin-right: 0.2rem; margin-left: 0.2rem; padding: 0; }");
-  }
   return <li itemId={props.server.id} style={{
     "list-style": (props.server.icon || props.server.voiceChannels.length > 0) ? "none" : "initial"
   }}>
@@ -31,6 +26,9 @@ const ServerListItem: Component<ChannelItemProps> = (props) => {
         setShowChannels(!showChannels());
         e.currentTarget.classList.toggle("caret-down");
       }}></span>
+    </Show>
+    <Show when={props.server.icon}>
+      <img src={props.server.icon} alt="" style="display: inline-block; vertical-align: middle; border-radius: 4px; object-fit: cover; aspect-ratio: 1/1; height: 1.5rem; width: 1.5rem; margin-right: 0.4rem; margin-left: 0.2rem;" />
     </Show>
     {props.server.name}
     <Show when={showChannels()}>
