@@ -100,8 +100,27 @@ const VoiceProvider: ParentComponent = (props) => {
   createEffect(() => {
     const u = user();
     if (!u) return;
-    const subJoin = u.on("join", (player: Player) => {
-      setChannel(player.channel);
+
+    if (u.player) {
+      if (u.player.channel) setChannel(u.player.channel);
+      setPlayer("loop", u.player.loop);
+      setPlayer("paused", u.player.paused);
+      setPlayer("volume", u.player.volume);
+      setPlayer("started", u.player.started);
+      setPlayer("timeDiff", u.player.timeDiff);
+      setPlayer("queue", u.player.queue);
+    }
+
+    const subJoin = u.on("join", (p: Player) => {
+      if (p?.channel) setChannel(p.channel);
+      if (p) {
+        setPlayer("loop", p.loop);
+        setPlayer("paused", p.paused);
+        setPlayer("volume", p.volume);
+        setPlayer("started", p.started);
+        setPlayer("timeDiff", p.timeDiff);
+        setPlayer("queue", p.queue);
+      }
     });
     const subLeave = u.on("leave", (_channel: string) => {
       setChannel(null);
@@ -118,12 +137,15 @@ const VoiceProvider: ParentComponent = (props) => {
       });
     });
     const subUpdate = u.on("playerUpdate", (p: Player) => {
-      setPlayer("loop", p.loop);
-      setPlayer("paused", p.paused);
-      setPlayer("volume", p.volume);
-      setPlayer("started", p.started);
-      setPlayer("timeDiff", p.timeDiff);
-      setPlayer("queue", p.queue);
+      if (p?.channel) setChannel(p.channel);
+      if (p) {
+        setPlayer("loop", p.loop);
+        setPlayer("paused", p.paused);
+        setPlayer("volume", p.volume);
+        setPlayer("started", p.started);
+        setPlayer("timeDiff", p.timeDiff);
+        setPlayer("queue", p.queue);
+      }
     });
     onCleanup(() => {
       subJoin.close();

@@ -55,12 +55,20 @@ export class User extends EventEmitter {
       this.emit("leave", channel);
     });
     const closePlayer = this.client.socket?.on("player", (data: SerialisedPlayer) => {
-      this.player?.deserialise(data);
-      this.emit("playerUpdate", this.player!);
+      if (!this.player) {
+        this.player = new Player(data);
+      } else {
+        this.player.deserialise(data);
+      }
+      this.emit("playerUpdate", this.player);
     });
-    const closeAuth = this.client.socket?.on("auth", (user: APIUser) => {
-      // TODO: check for changes in connectedChannel
-      console.log("auth", user);
+    const closeAuth = this.client.socket?.on("auth", (data: APIUser) => {
+      if (Array.isArray(data?.connectedTo)) {
+        this.connectedTo = data.connectedTo;
+        if (this.connectedTo[0] && (!this.player || this.player.channel?.id !== this.connectedTo[0])) {
+          this.fetchPlayer();
+        }
+      }
     });
   }
 
