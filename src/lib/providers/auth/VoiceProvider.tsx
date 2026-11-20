@@ -101,27 +101,23 @@ const VoiceProvider: ParentComponent = (props) => {
     const u = user();
     if (!u) return;
 
-    if (u.player) {
-      if (u.player.channel) setChannel(u.player.channel);
-      setPlayer("loop", u.player.loop);
-      setPlayer("paused", u.player.paused);
-      setPlayer("volume", u.player.volume);
-      setPlayer("started", u.player.started);
-      setPlayer("timeDiff", u.player.timeDiff);
-      setPlayer("queue", u.player.queue);
-    }
+    const syncPlayer = (p: Player) => {
+      if (!p) return;
+      if (p.channel) setChannel(p.channel);
+      setPlayer({
+        loop: p.loop,
+        paused: p.paused,
+        volume: p.volume,
+        started: p.started,
+        timeDiff: p.timeDiff,
+        queue: p.queue
+      });
+    };
 
-    const subJoin = u.on("join", (p: Player) => {
-      if (p?.channel) setChannel(p.channel);
-      if (p) {
-        setPlayer("loop", p.loop);
-        setPlayer("paused", p.paused);
-        setPlayer("volume", p.volume);
-        setPlayer("started", p.started);
-        setPlayer("timeDiff", p.timeDiff);
-        setPlayer("queue", p.queue);
-      }
-    });
+    if (u.player) syncPlayer(u.player);
+
+    const subJoin = u.on("join", syncPlayer);
+    const subUpdate = u.on("playerUpdate", syncPlayer);
     const subLeave = u.on("leave", (_channel: string) => {
       setChannel(null);
       setPlayer({
@@ -135,17 +131,6 @@ const VoiceProvider: ParentComponent = (props) => {
           data: []
         }
       });
-    });
-    const subUpdate = u.on("playerUpdate", (p: Player) => {
-      if (p?.channel) setChannel(p.channel);
-      if (p) {
-        setPlayer("loop", p.loop);
-        setPlayer("paused", p.paused);
-        setPlayer("volume", p.volume);
-        setPlayer("started", p.started);
-        setPlayer("timeDiff", p.timeDiff);
-        setPlayer("queue", p.queue);
-      }
     });
     onCleanup(() => {
       subJoin.close();
