@@ -1,6 +1,7 @@
 import { Component, createEffect, createSignal, onMount, Show } from "solid-js";
 import { useAuth } from "../lib/providers/auth/AuthProvider";
 import '@fortawesome/fontawesome-free/js/all.js';
+import icon from "../assets/icon.png";
 
 const LoginWidget: Component = () => {
   const [drop, setDrop] = createSignal(false);
@@ -37,7 +38,7 @@ const LoginWidget: Component = () => {
           onclick={() => setDrop((prev) => !prev)}
         >
           <img
-            src={user()?.avatar.url}
+            src={user()?.avatar?.url || icon}
             alt=""
             style="width: 1.35rem; height: 1.35rem; border-radius: 50%; object-fit: cover; flex-shrink: 0;"
           />
